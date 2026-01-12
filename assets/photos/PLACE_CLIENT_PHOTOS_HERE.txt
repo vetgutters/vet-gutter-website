@@ -1,0 +1,1 @@
+Drop client photos here with filenames specified in README.md
