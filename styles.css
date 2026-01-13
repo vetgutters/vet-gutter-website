@@ -740,7 +740,19 @@ footer p {
     /* Prevent horizontal scroll */
     html,
     body {
-        overflow-x: hidden;
+        /* overflow-x: hidden; REMOVED per user request to let body expand */
+        min-width: 100%;
+        width: max-content;
+        /* Ensure body grows to fit the widest element (header) */
+        background-color: #1a1a1a;
+        /* Ensure the void is filled with base color */
+    }
+
+    /* Force full-width sections to stretch to the new body width */
+    .hero-section,
+    .trust-strip,
+    .section,
+    footer {
         width: 100%;
     }
 
