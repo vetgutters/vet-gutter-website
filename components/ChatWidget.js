@@ -242,6 +242,7 @@ addMessage(text, sender) {
 
     // Add user message
     this.addMessage(text, 'user');
+    this.messages.push({ role: 'user', content: text }); // Add to history
     this.input.value = '';
 
     // Show typing
@@ -252,7 +253,7 @@ addMessage(text, sender) {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: text })
+            body: JSON.stringify({ messages: this.messages }) // Send full history
         });
 
         const data = await response.json();
@@ -263,6 +264,10 @@ addMessage(text, sender) {
             this.addMessage("I'm having trouble connecting right now. Please call us directly.", 'bot');
         } else {
             this.addMessage(data.response, 'bot');
+
+            // Add bot response to history
+            this.messages.push({ role: 'assistant', content: data.response });
+
         }
 
     } catch (err) {
