@@ -734,7 +734,24 @@ footer p {
 }
 
 /* Mobile specific fixes (Max-width 480px) */
+/* Mobile specific fixes (Max-width 480px) */
 @media (max-width: 480px) {
+
+    /* Prevent horizontal scroll */
+    html,
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
+    /* Reduce container padding to give more internal space */
+    .container {
+        padding: 0 12px;
+    }
+
+    .nav-container {
+        gap: 5px;
+    }
 
     /* Create space in header by hiding text, keeping only logo icon */
     .brand-text {
@@ -742,18 +759,22 @@ footer p {
     }
 
     .brand-logo {
-        height: 50px;
-        /* Slightly larger icon since text is gone */
+        height: 40px;
+        /* Small enough to allow phone button to fit */
     }
 
-    /* Prevent call button clipping */
+    /* Prevent call button clipping/wrapping */
     .nav-right {
-        margin-right: 5px;
+        margin-right: 0;
+        gap: 8px;
     }
 
     .btn-outline {
-        padding: 8px 12px;
-        font-size: 0.9rem;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        /* Force single line */
+        height: 36px;
     }
 
     /* Adjust Warranty/Trust bar to not jam the header */
