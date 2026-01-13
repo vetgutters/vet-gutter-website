@@ -732,3 +732,64 @@ footer p {
         max-width: 300px;
     }
 }
+
+/* Mobile specific fixes (Max-width 480px) */
+@media (max-width: 480px) {
+
+    /* Create space in header by hiding text, keeping only logo icon */
+    .brand-text {
+        display: none !important;
+    }
+
+    .brand-logo {
+        height: 50px;
+        /* Slightly larger icon since text is gone */
+    }
+
+    /* Prevent call button clipping */
+    .nav-right {
+        margin-right: 5px;
+    }
+
+    .btn-outline {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    /* Adjust Warranty/Trust bar to not jam the header */
+    .trust-pill {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Un-crowd the Hero buttons */
+    .hero-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Reduce Giant Hero Text */
+    .hero-content h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    /* Fix Service Area buttons touching */
+    .locations-grid {
+        gap: 15px !important;
+    }
+
+    /* process steps */
+    .steps-row {
+        gap: 40px;
+    }
+}
