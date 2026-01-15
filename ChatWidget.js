@@ -162,20 +162,13 @@ class ChatWidget {
         document.head.appendChild(style);
     }
 
-    if(this.isOpen) setTimeout(() => this.input.focus(), 300);
 
-// Hide badge on open
-if (this.isOpen) {
-    const badge = this.container.querySelector('.chat-notification-badge');
-    if (badge) badge.style.display = 'none';
-}
-    }
 
-createDOM() {
-    this.container = document.createElement('div');
-    this.container.className = 'chat-widget';
+    createDOM() {
+        this.container = document.createElement('div');
+        this.container.className = 'chat-widget';
 
-    this.container.innerHTML = `
+        this.container.innerHTML = `
             <div class="chat-window" id="chatWindow">
                 <div class="chat-header">
                     <img src="assets/logo-shield.png" alt="VGG">
@@ -198,84 +191,84 @@ createDOM() {
             </button>
         `;
 
-    document.body.appendChild(this.container);
+        document.body.appendChild(this.container);
 
-    this.window = this.container.querySelector('#chatWindow');
-    this.messagesContainer = this.container.querySelector('#chatMessages');
-    this.input = this.container.querySelector('#chatInput');
-    this.sendBtn = this.container.querySelector('#chatSend');
-    this.toggleBtn = this.container.querySelector('#chatToggle');
-    this.typingIndicator = this.container.querySelector('#typingIndicator');
+        this.window = this.container.querySelector('#chatWindow');
+        this.messagesContainer = this.container.querySelector('#chatMessages');
+        this.input = this.container.querySelector('#chatInput');
+        this.sendBtn = this.container.querySelector('#chatSend');
+        this.toggleBtn = this.container.querySelector('#chatToggle');
+        this.typingIndicator = this.container.querySelector('#typingIndicator');
 
-    // Auto-show badge logic could go here (it's hardcoded visible for now for immediate impact)
-}
+        // Auto-show badge logic could go here (it's hardcoded visible for now for immediate impact)
+    }
 
-attachEvents() {
-    this.toggleBtn.addEventListener('click', () => this.toggleChat());
-    this.sendBtn.addEventListener('click', () => this.sendMessage());
-    this.input.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') this.sendMessage();
-    });
-}
+    attachEvents() {
+        this.toggleBtn.addEventListener('click', () => this.toggleChat());
+        this.sendBtn.addEventListener('click', () => this.sendMessage());
+        this.input.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMessage();
+        });
+    }
 
-toggleChat() {
-    this.isOpen = !this.isOpen;
-    this.window.classList.toggle('open', this.isOpen);
-    this.toggleBtn.innerHTML = this.isOpen ?
-        '<i class="fa-solid fa-xmark"></i>' :
-        '<i class="fa-solid fa-comment-dots"></i>';
+    toggleChat() {
+        this.isOpen = !this.isOpen;
+        this.window.classList.toggle('open', this.isOpen);
+        this.toggleBtn.innerHTML = this.isOpen ?
+            '<i class="fa-solid fa-xmark"></i>' :
+            '<i class="fa-solid fa-comment-dots"></i>';
 
-    if (this.isOpen) setTimeout(() => this.input.focus(), 300);
-}
+        if (this.isOpen) setTimeout(() => this.input.focus(), 300);
+    }
 
-addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = `message ${sender}`;
-    div.textContent = text;
-    this.messagesContainer.appendChild(div);
-    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-}
+    addMessage(text, sender) {
+        const div = document.createElement('div');
+        div.className = `message ${sender}`;
+        div.textContent = text;
+        this.messagesContainer.appendChild(div);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    }
 
     async sendMessage() {
-    const text = this.input.value.trim();
-    if (!text) return;
+        const text = this.input.value.trim();
+        if (!text) return;
 
-    // Add user message
-    this.addMessage(text, 'user');
-    this.messages.push({ role: 'user', content: text }); // Add to history
-    this.input.value = '';
+        // Add user message
+        this.addMessage(text, 'user');
+        this.messages.push({ role: 'user', content: text }); // Add to history
+        this.input.value = '';
 
-    // Show typing
-    this.typingIndicator.style.display = 'block';
+        // Show typing
+        this.typingIndicator.style.display = 'block';
 
-    try {
-        // Call Backend API
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ messages: this.messages }) // Send full history
-        });
+        try {
+            // Call Backend API
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages: this.messages }) // Send full history
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        this.typingIndicator.style.display = 'none';
+            this.typingIndicator.style.display = 'none';
 
-        if (data.error) {
-            this.addMessage("I'm having trouble connecting right now. Please call us directly.", 'bot');
-        } else {
-            this.addMessage(data.response, 'bot');
+            if (data.error) {
+                this.addMessage("I'm having trouble connecting right now. Please call us directly.", 'bot');
+            } else {
+                this.addMessage(data.response, 'bot');
 
-            // Add bot response to history
-            this.messages.push({ role: 'assistant', content: data.response });
+                // Add bot response to history
+                this.messages.push({ role: 'assistant', content: data.response });
 
+            }
+
+        } catch (err) {
+            console.error(err);
+            this.typingIndicator.style.display = 'none';
+            this.addMessage("Sorry, I seem to be offline. Please call (321) 278-7996.", 'bot');
         }
-
-    } catch (err) {
-        console.error(err);
-        this.typingIndicator.style.display = 'none';
-        this.addMessage("Sorry, I seem to be offline. Please call (321) 278-7996.", 'bot');
     }
-}
 }
 
 // Initialize on load
