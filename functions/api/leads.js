@@ -36,11 +36,62 @@ export async function onRequest(context) {
             return new Response(JSON.stringify({ error: 'Failed to save lead' }), { status: 500 });
         }
 
-        return new Response(JSON.stringify({ success: true, message: 'Lead saved' }), {
+        // --- Notification Logic ---
+        const notificationResult = await sendEmailNotification(env, { name, phone, service });
+
+        return new Response(JSON.stringify({
+            success: true,
+            message: 'Lead saved',
+            notification: notificationResult
+        }), {
             headers: { 'Content-Type': 'application/json' }
         });
 
     } catch (err) {
+        console.error("Lead Error:", err);
         return new Response(JSON.stringify({ error: 'Invalid Request' }), { status: 400 });
+    }
+}
+
+// --- Helper: Send Email via Resend (or similar) ---
+async function sendEmailNotification(env, lead) {
+    const API_KEY = env.RESEND_API_KEY;
+    if (!API_KEY) {
+        console.log("Email Notification Skipped: No RESEND_API_KEY in environment variables.");
+        return "skipped_no_key";
+    }
+
+    try {
+        const res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                from: 'Veteran Gutters Leads <leads@veterangutterguards.com>', // Requires verified domain in Resend
+                to: ['Vetgutters@gmail.com'], // Replace with env.OWNER_EMAIL if desired
+                subject: `🚀 New Lead: ${lead.name}`,
+                html: `
+                    <h1>New Website Lead</h1>
+                    <p><strong>Name:</strong> ${lead.name}</p>
+                    <p><strong>Phone:</strong> <a href="tel:${lead.phone}">${lead.phone}</a></p>
+                    <p><strong>Service:</strong> ${lead.service}</p>
+                    <hr>
+                    <p><em><small>Sent from Veteran Gutters Website</small></em></p>
+                `
+            })
+        });
+
+        if (res.ok) {
+            return "sent";
+        } else {
+            const err = await res.text();
+            console.error("Email API Error:", err);
+            return "failed_api";
+        }
+    } catch (e) {
+        console.error("Email Fetch Error:", e);
+        return "failed_network";
     }
 }

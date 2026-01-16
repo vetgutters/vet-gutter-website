@@ -115,35 +115,13 @@ export async function onRequest(context) {
                 console.error("Supabase Save Error:", error);
                 botResponseText += "\n(Note: Saved locally. We will call you.)";
             } else {
-                // Optional: Google Calendar Integration
-                /*
-                if (GOOGLE_SERVICE_ACCOUNT_JSON) {
-                    try {
-                        const credentials = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON);
-                        const auth = new google.auth.JWT(
-                            credentials.client_email,
-                            null,
-                            credentials.private_key,
-                            ['https://www.googleapis.com/auth/calendar']
-                        );
-                        const calendar = google.calendar({ version: 'v3', auth });
-                        const now = new Date();
-                        const end = new Date(now.getTime() + 30 * 60000);
-
-                        await calendar.events.insert({
-                            calendarId: CALENDAR_ID,
-                            requestBody: {
-                                summary: `NEW LEAD: ${leadPayload.name}`,
-                                description: `Phone: ${leadPayload.phone}\nAddress: ${leadPayload.address}\n\n${leadPayload.notes}`,
-                                start: { dateTime: now.toISOString() },
-                                end: { dateTime: end.toISOString() }
-                            }
-                        });
-                    } catch (calErr) {
-                        console.error("Calendar Error:", calErr);
-                    }
-                }
-                */
+                // --- Notification Logic ---
+                // Send email notification for chat leads
+                await sendEmailNotification(env, {
+                    name: leadPayload.name,
+                    phone: leadPayload.phone,
+                    service: "Chatbot Lead (See Notes)"
+                });
             }
         }
 
@@ -158,5 +136,48 @@ export async function onRequest(context) {
     } catch (error) {
         console.error("Server Error:", error);
         return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    }
+}
+
+// --- Helper: Send Email via Resend (or similar) ---
+async function sendEmailNotification(env, lead) {
+    const API_KEY = env.RESEND_API_KEY;
+    if (!API_KEY) {
+        console.log("Email Notification Skipped: No RESEND_API_KEY in environment variables.");
+        return "skipped_no_key";
+    }
+
+    try {
+        const res = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                from: 'Veteran Gutters Leads <leads@veterangutterguards.com>', // Requires verified domain in Resend
+                to: ['Vetgutters@gmail.com'], // Replace with env.OWNER_EMAIL if desired
+                subject: `🚀 New Lead: ${lead.name}`,
+                html: `
+                    <h1>New Website Lead</h1>
+                    <p><strong>Name:</strong> ${lead.name}</p>
+                    <p><strong>Phone:</strong> <a href="tel:${lead.phone}">${lead.phone}</a></p>
+                    <p><strong>Service:</strong> ${lead.service}</p>
+                    <hr>
+                    <p><em><small>Sent from Veteran Gutters Website</small></em></p>
+                `
+            })
+        });
+
+        if (res.ok) {
+            return "sent";
+        } else {
+            const err = await res.text();
+            console.error("Email API Error:", err);
+            return "failed_api";
+        }
+    } catch (e) {
+        console.error("Email Fetch Error:", e);
+        return "failed_network";
     }
 }
