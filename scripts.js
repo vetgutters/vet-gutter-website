@@ -118,11 +118,26 @@ function openLightbox(element) {
 
 function closeLightbox(event) {
   // Close if clicked on background or close button, but not the image itself
-  if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox) {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = ''; // Restore scrolling
-    }
+}
   }
 }
+
+// --- Scroll Animation Observer ---
+const observerOptions = {
+  threshold: 0.1, // Trigger when 10% visible
+  rootMargin: "0px 0px -50px 0px" // Trigger slightly before entering bottom
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      observer.unobserve(entry.target); // Run once
+    }
+  });
+}, observerOptions);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const animatedElements = document.querySelectorAll('.animate-on-scroll');
+  animatedElements.forEach(el => observer.observe(el));
+});
