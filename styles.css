@@ -737,15 +737,13 @@ footer p {
 /* Mobile specific fixes (Max-width 480px) */
 @media (max-width: 480px) {
 
-    /* Prevent horizontal scroll */
+    /* Prevent horizontal scroll - FIXED */
     html,
     body {
-        /* overflow-x: hidden; REMOVED per user request to let body expand */
-        min-width: 100%;
-        width: max-content;
-        /* Ensure body grows to fit the widest element (header) */
+        overflow-x: hidden;
+        width: 100%;
         background-color: #1a1a1a;
-        /* Ensure the void is filled with base color */
+        position: relative;
     }
 
     /* Force full-width sections to stretch to the new body width */
@@ -754,6 +752,8 @@ footer p {
     .section,
     footer {
         width: 100%;
+        padding-left: 0;
+        padding-right: 0;
     }
 
     /* Reduce container padding to give more internal space */
