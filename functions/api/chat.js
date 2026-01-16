@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { google } from 'googleapis';
+// import { google } from 'googleapis';
 
 export async function onRequest(context) {
     const { request, env } = context;
@@ -116,6 +116,7 @@ export async function onRequest(context) {
                 botResponseText += "\n(Note: Saved locally. We will call you.)";
             } else {
                 // Optional: Google Calendar Integration
+                /*
                 if (GOOGLE_SERVICE_ACCOUNT_JSON) {
                     try {
                         const credentials = JSON.parse(GOOGLE_SERVICE_ACCOUNT_JSON);
@@ -142,10 +143,12 @@ export async function onRequest(context) {
                         console.error("Calendar Error:", calErr);
                     }
                 }
+                */
             }
         }
 
         return new Response(JSON.stringify({
+            response: botResponseText,
             role: 'assistant',
             content: botResponseText
         }), {

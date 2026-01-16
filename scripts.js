@@ -52,6 +52,57 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+/* --- Lead Form Handling --- */
+window.handleLeadSubmit = async function (event) {
+  event.preventDefault();
+  const form = event.target;
+  const btn = form.querySelector('button[type="submit"]');
+  const originalText = btn.innerText;
+
+  const data = {
+    name: form.name.value,
+    phone: form.phone.value,
+    service: form.service.value
+  };
+
+  btn.innerText = "Sending...";
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/leads', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      btn.innerText = "Received! Expect a Call Shortly.";
+      btn.style.background = "linear-gradient(45deg, #11998e, #38ef7d)"; // Success Green
+      btn.style.color = "#fff";
+      form.reset();
+      setTimeout(() => {
+        btn.innerText = originalText;
+        btn.style.background = ""; // Reset
+        btn.style.color = "";
+        btn.disabled = false;
+      }, 5000);
+    } else {
+      throw new Error(result.error || "Submission failed");
+    }
+  } catch (err) {
+    console.error(err);
+    btn.innerText = "Error. Please Call Us Instead.";
+    btn.style.background = "#f44336"; // Red
+    setTimeout(() => {
+      btn.innerText = originalText;
+      btn.style.background = "";
+      btn.disabled = false;
+    }, 3000);
+  }
+};
+
 // --- Lightbox Functionality (Global) ---
 function openLightbox(element) {
   const lightbox = document.getElementById('lightbox');

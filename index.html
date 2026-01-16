@@ -119,17 +119,42 @@
     <section class="hero-section">
         <div class="container hero-container">
             <div class="hero-content">
-                <div class="trust-pill">
-                    <i class="fa-solid fa-star" style="color: var(--gold);"></i>
-                    <span>#1 Rated in Ocala & The Villages</span>
+                <div class="veteran-badge">
+                    <i class="fa-solid fa-medal"></i> Veteran Owned & Operated
                 </div>
                 <h1>Protect Your Home with <span style="color: var(--gold);">Precision</span></h1>
                 <p class="hero-subtext">Veteran-owned gutter installation and leaf protection. We don't just hang
                     gutters; we engineer water management systems.</p>
-                <div class="hero-actions">
-                    <a href="#contact" class="btn btn-primary">Get a Free Estimate</a>
-                    <a href="tel:3212787996" class="btn btn-outline"><i class="fa-solid fa-phone"></i> (321)
-                        278-7996</a>
+                <div id="hero-form" class="power-form-wrapper">
+                    <div class="power-form-header">
+                        <h3>Get Your Free Quote</h3>
+                        <p>Fast • Precise • 100% Free</p>
+                    </div>
+                    <form id="leadForm" onsubmit="handleLeadSubmit(event)">
+                        <div class="pf-group">
+                            <input type="text" name="name" class="pf-input" placeholder="Your Name" required>
+                        </div>
+                        <div class="pf-group">
+                            <input type="tel" name="phone" class="pf-input" placeholder="Phone Number" required>
+                        </div>
+                        <div class="pf-group">
+                            <select name="service" class="pf-select">
+                                <option value="Seamless Gutters">New Seamless Gutters</option>
+                                <option value="Gutter Guards">Gutter Guards</option>
+                                <option value="Repairs">Repairs & Cleaning</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="pf-submit">Get My Price ></button>
+                        <div class="secure-note">
+                            <i class="fa-solid fa-lock"></i> Your info is 100% secure.
+                        </div>
+                    </form>
+                    <!-- Mini Trust Icons -->
+                    <div class="mini-trust-icons">
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> Licensed</span>
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> Insured</span>
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> 5-Star Rated</span>
+                    </div>
                 </div>
 
             </div>
@@ -139,6 +164,17 @@
             </div>
         </div>
     </section>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="mobile-cta-bar">
+        <a href="tel:3212787996" class="mobile-cta-btn cta-call">
+            <i class="fa-solid fa-phone"></i> Call
+        </a>
+        <a href="#hero-form" class="mobile-cta-btn cta-quote"
+            onclick="document.querySelector('#hero-form').scrollIntoView({behavior: 'smooth'})">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Get Quote
+        </a>
+    </div>
 
     <!-- Trust Badges Strip (Standardized) -->
     <section
@@ -309,10 +345,16 @@
                 <!-- Review 1 -->
                 <div class="review-card"
                     style="background: #1a1a1a; padding: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-                    <div style="color: var(--gold); margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="color: var(--gold);">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <span
+                            style="font-size: 0.75rem; color: #aaa; border: 1px solid #444; padding: 2px 8px; border-radius: 4px;">Verified
+                            <i class="fa-solid fa-check"></i></span>
                     </div>
                     <p style="font-style: italic; margin-bottom: 20px;">"Veteran Gutters did an amazing job on our home.
                         The seamless gutters look fantastic and the crew was professional and efficient."</p>
@@ -322,10 +364,16 @@
                 <!-- Review 2 -->
                 <div class="review-card"
                     style="background: #1a1a1a; padding: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-                    <div style="color: var(--gold); margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="color: var(--gold);">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <span
+                            style="font-size: 0.75rem; color: #aaa; border: 1px solid #444; padding: 2px 8px; border-radius: 4px;">Verified
+                            <i class="fa-solid fa-check"></i></span>
                     </div>
                     <p style="font-style: italic; margin-bottom: 20px;">"Great communication and excellent workmanship.
                         Highly recommend for anyone needing gutter guards in Ocala."</p>
@@ -335,10 +383,16 @@
                 <!-- Review 3 -->
                 <div class="review-card"
                     style="background: #1a1a1a; padding: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
-                    <div style="color: var(--gold); margin-bottom: 15px;">
-                        <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
-                            class="fa-solid fa-star"></i>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="color: var(--gold);">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <span
+                            style="font-size: 0.75rem; color: #aaa; border: 1px solid #444; padding: 2px 8px; border-radius: 4px;">Verified
+                            <i class="fa-solid fa-check"></i></span>
                     </div>
                     <p style="font-style: italic; margin-bottom: 20px;">"Reliable, honest, and high quality. It's great
                         to support a veteran-owned business that delivers on its promises."</p>
@@ -396,6 +450,58 @@
     <script src="ChatWidget.js"></script>
     <script src="scripts.js"></script>
     <!-- Deployment Trigger v2: Fix Mobile Width -->
+    <script>
+        /* --- Lead Form Handling (Inline) --- */
+        async function handleLeadSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+
+            const data = {
+                name: form.name.value,
+                phone: form.phone.value,
+                service: form.service.value
+            };
+
+            btn.innerText = "Sending...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    btn.innerText = "Received! Expect a Call Shortly.";
+                    btn.style.background = "linear-gradient(45deg, #11998e, #38ef7d)"; // Success Green
+                    btn.style.color = "#fff";
+                    form.reset();
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.background = ""; // Reset
+                        btn.style.color = "";
+                        btn.disabled = false;
+                    }, 5000);
+                } else {
+                    throw new Error(result.error || "Submission failed");
+                }
+            } catch (err) {
+                console.error(err);
+                btn.innerText = "Error. Please Call Us Instead.";
+                btn.style.background = "#f44336"; // Red
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    btn.disabled = false;
+                }, 3000);
+            }
+        }
+    </script>
 </body>
 
 </html>
