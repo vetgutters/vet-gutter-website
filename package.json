@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "mkdir -p dist && cp *.html *.css *.js *.xml *.txt *.json dist/ 2>/dev/null || : && cp -r assets dist/ 2>/dev/null || : && cp -r functions dist/ 2>/dev/null || : && cp -r locations dist/ 2>/dev/null || : && cp -r services dist/ 2>/dev/null || : && cp -r admin dist/ 2>/dev/null || :"
+        "build": "echo \"Build bypassed - Serving from root\""
     },
     "keywords": [],
     "author": "",
