@@ -46,6 +46,71 @@ const contentOverrides = {
         heroTitle: 'Enjoy Your Retirement. <span style="color: var(--gold);">Stay Off The Ladder.</span>',
         heroSubtext: 'We specialize in Gutter Guards for The Villages. Never clean your gutters again. Protect your home and your safety with our lifetime warranty systems.',
         metaDesc: 'Gutter guards and installation for The Villages. Stay safe and off the ladder with our lifetime warranty leaf protection systems.'
+    },
+    'belleview': {
+        heroTitle: 'Preserving <span style="color: var(--gold);">Belleview\'s</span> Charm & Value',
+        heroSubtext: 'Specialist care for Belleview homes. From historic renovations near Lake Lillian to new builds, we ensure perfect drainage.',
+        metaDesc: 'Belleview\'s trusted gutter experts. Protecting local homes with seamless systems and advanced leaf guards.'
+    },
+    'lady-lake': {
+        heroTitle: 'The Live Oak City Needs <span style="color: var(--gold);">Real Gutter Guards</span>',
+        heroSubtext: 'Lady Lake is beautiful but leafy. Our micro-mesh guards keep oak tassels and pine needles out for good.',
+        metaDesc: 'Lifetime gutter guards for Lady Lake. Stop cleaning pine needles and oak leaves. Veteran-installed protection.'
+    },
+    'dunnellon': {
+        heroTitle: 'Riverland Protection. <span style="color: var(--gold);">Handle the Heavy Rain.</span>',
+        heroSubtext: 'Dunnellon\'s unique river geography means heavy storms. Our 6" seamless gutters manage high-volume water flow effortlessly.',
+        metaDesc: 'High-capacity seamless gutters for Dunnellon and Rainbow Springs areas. Protect your foundation from heavy river valley rains.'
+    },
+    'wildwood': {
+        heroTitle: 'The Crossroads of Florida. <span style="color: var(--gold);">The Standard for Gutters.</span>',
+        heroSubtext: 'As Wildwood grows, ensure your home is protected with modern, durable seamless aluminum systems designed for longevity.',
+        metaDesc: 'Premier gutter installation in Wildwood, FL. Modern seamless designs for new and existing homes. Licensed & Insured.'
+    },
+    'leesburg': {
+        heroTitle: 'Lakefront Living. <span style="color: var(--gold);">Watertight Protection.</span>',
+        heroSubtext: 'Protect your Leesburg lake home from roof runoff. We specialize in fascia repair and high-capacity water management.',
+        metaDesc: 'Expert gutter services for Leesburg and the Lake Harris chain. Protect your lakefront property with seamless aluminum gutters.'
+    },
+    'summerfield': {
+        heroTitle: 'Strong Gutters for <span style="color: var(--gold);">Strong Communities.</span>',
+        heroSubtext: 'Serving Summerfield\'s diverse homes with reliable, military-grade aluminum gutters that stand up to Florida storms.',
+        metaDesc: 'Reliable seamless gutters for Summerfield, FL. Veteran-owned, affordable, and built to last. Free estimates.'
+    },
+    'fruitland-park': {
+        heroTitle: 'The Friendly City. <span style="color: var(--gold);">The Friendly Gutter Experts.</span>',
+        heroSubtext: 'Enhance your Fruitland Park home\'s curb appeal with custom-colored seamless gutters that match your trim perfectly.',
+        metaDesc: 'Boost curb appeal in Fruitland Park with custom seamless gutters. Matches your home\'s style perfectly. Lifetime warranty.'
+    },
+    'oxford': {
+        heroTitle: 'New Growth. <span style="color: var(--gold);">Lifetime Protection.</span>',
+        heroSubtext: 'Upgrading a new home in Oxford? Replace builder-grade plastic with reliable seamless aluminum that lasts a lifetime.',
+        metaDesc: 'Upgrade your Oxford home with seamless aluminum gutters. Replace builder-grade materials with lifetime-warranty systems.'
+    },
+    'inverness': {
+        heroTitle: 'Small Town Done Right. <span style="color: var(--gold);">Gutters Done Right.</span>',
+        heroSubtext: 'Preserving the integrity of Inverness homes with precision cut-and-drop seamless gutters. No leaks, no hassles.',
+        metaDesc: 'Precision gutter installation in Inverness, FL. protecting historic and modern homes with leak-free seamless systems.'
+    },
+    'hernando': {
+        heroTitle: 'Nature Coast Living. <span style="color: var(--gold);">Debris-Free Living.</span>',
+        heroSubtext: 'Don\'t let nature take over your roof. Our gutter guards are essential for Hernando homes surrounded by canopy.',
+        metaDesc: 'Top-rated gutter guards for Hernando, FL. Keep your gutters flowing freely despite the heavy tree coverage.'
+    },
+    'citrus-springs': {
+        heroTitle: 'Resort-Style Living. <span style="color: var(--gold);">Maintenance-Free Gutters.</span>',
+        heroSubtext: 'Enjoy the Citrus Springs lifestyle without the chore of gutter cleaning. Ask about our lifetime "no-clog" guarantee.',
+        metaDesc: 'Maintenance-free gutter guards for Citrus Springs. Enjoy your home, don\'t work on it. 5-star veteran rated service.'
+    },
+    'silver-springs-shores': {
+        heroTitle: 'Pure Water. <span style="color: var(--gold);">Clean Runoff.</span>',
+        heroSubtext: 'Protect the aquifer and your foundation. Our systems ensure rainwater is directed away from your home responsibly.',
+        metaDesc: 'Eco-friendly water management for Silver Springs Shores. Direct runoff away from your foundation effectively.'
+    },
+    'marion-oaks': {
+        heroTitle: 'Big Community. <span style="color: var(--gold);">Personal Service.</span>',
+        heroSubtext: 'We treat every Marion Oaks neighbor like family. Fast response times and affordable rates for our local community.',
+        metaDesc: 'Affordable, reliable gutters for Marion Oaks. Fast local service from a Veteran-owned team you can trust.'
     }
 };
 
