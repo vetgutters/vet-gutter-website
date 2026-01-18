@@ -142,7 +142,32 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, observerOptions);
 
-document.addEventListener('DOMContentLoaded', () => {
-  const animatedElements = document.querySelectorAll('.animate-on-scroll');
-  animatedElements.forEach(el => observer.observe(el));
+const animatedElements = document.querySelectorAll('.animate-on-scroll');
+animatedElements.forEach(el => observer.observe(el));
+
+// Initialize Storm Protocol
+checkWeather();
 });
+
+// --- THE STORM PROTOCOL (Weather Logic) ---
+async function checkWeather() {
+  try {
+    const res = await fetch('/api/weather');
+    if (!res.ok) return;
+    const weather = await res.json();
+
+    // If storming (or forced for demo), show banner
+    // Note: For demo, check strictly for isStorming boolean from API
+    if (weather.isStorming) {
+      const banner = document.getElementById('stormBanner');
+      const msg = document.getElementById('stormMessage');
+
+      if (banner && msg) {
+        msg.textContent = `${weather.condition} Detected.`;
+        banner.style.display = 'block';
+      }
+    }
+  } catch (e) {
+    console.log("Weather check failed (stealth mode):", e);
+  }
+}

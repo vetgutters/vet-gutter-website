@@ -1099,5 +1099,100 @@ footer p {
     transform: translateY(-8px);
     box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
     /* Gold glow */
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+    /* Gold glow */
     border-color: var(--gold);
+}
+
+/* --- THE STORM PROTOCOL --- */
+.storm-banner {
+    background: linear-gradient(90deg, #1f2937, #111827);
+    color: #fff;
+    border-bottom: 2px solid #3b82f6;
+    /* Rain Blue */
+    padding: 12px 0;
+    position: relative;
+    z-index: 99;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.storm-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.storm-icon {
+    font-size: 1.5rem;
+    color: #60a5fa;
+    /* Light Blue */
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.storm-text {
+    font-size: 0.95rem;
+}
+
+.storm-cta {
+    color: #93c5fd;
+    margin-left: 5px;
+}
+
+.storm-btn {
+    background: #2563eb;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.storm-btn:hover {
+    background: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+    .storm-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .storm-cta {
+        display: block;
+        margin: 0;
+    }
 }
