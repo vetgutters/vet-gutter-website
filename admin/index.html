@@ -196,27 +196,28 @@
                     return;
                 }
 
-                <tr>
-                    <td>${new Date(lead.created_at).toLocaleDateString()} ${new Date(lead.created_at).toLocaleTimeString()}</td>
-                    <td style="font-weight:600;">${lead.name}</td>
-                    <td><a href="tel:${lead.phone}" style="color:var(--gold);">${lead.phone}</a></td>
-                    <td>${lead.notes || lead.service || '-'}</td>
-                    <td>
-                        <a href="tel:${lead.phone}" class="action-btn">📞 Call</a>
-                        <button onclick="copyReviewLink('${lead.phone}')" class="action-btn" style="background: #444; border:none; cursor:pointer;">⭐ Review</button>
-                    </td>
-                </tr>
+                tableBody.innerHTML = leads.map(lead => `
+                    <tr>
+                        <td>${new Date(lead.created_at).toLocaleDateString()} ${new Date(lead.created_at).toLocaleTimeString()}</td>
+                        <td style="font-weight:600;">${lead.name}</td>
+                        <td><a href="tel:${lead.phone}" style="color:var(--gold);">${lead.phone}</a></td>
+                        <td>${lead.notes || lead.service || '-'}</td>
+                        <td>
+                            <a href="tel:${lead.phone}" class="action-btn">📞 Call</a>
+                            <button onclick="copyReviewLink('${lead.phone}')" class="action-btn" style="background: #444; border:none; cursor:pointer;">⭐ Review</button>
+                        </td>
+                    </tr>
                 `).join('');
             } catch (err) {
-                 console.error(err);
-                 tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">Error loading leads.</td></tr>';
+                console.error(err);
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">Error loading leads.</td></tr>';
             }
         }
 
         function copyReviewLink(phone) {
             const link = "https://veterangutterguards.com/feedback.html";
-            const text = `Hi, this is Jesse from Veteran Gutters.Thanks for choosing us! Could you take a moment to rate your experience ? ${ link }`;
-            
+            const text = `Hi, this is Jesse from Veteran Gutters.Thanks for choosing us! Could you take a moment to rate your experience ? ${link}`;
+
             navigator.clipboard.writeText(text).then(() => {
                 alert("Review Request Copied to Clipboard!\n\nPaste it into a text message.");
             });
