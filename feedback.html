@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Your Experience | Veteran Gutters</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: var(--bg-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .feedback-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            font-size: 2.5rem;
+            cursor: pointer;
+        }
+
+        .star {
+            color: #444;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .star:hover,
+        .star.active {
+            color: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .hidden-form {
+            display: none;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        textarea {
+            width: 100%;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            min-height: 100px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="feedback-card">
+        <img src="assets/logo-shield.png" alt="Veteran Gutters" style="width: 80px; margin-bottom: 20px;">
+        <h2>How did we do?</h2>
+        <p style="color: #aaa;">Please rate your experience with Veteran Gutters.</p>
+
+        <div class="stars" id="starContainer">
+            <i class="fa-solid fa-star star" data-value="1"></i>
+            <i class="fa-solid fa-star star" data-value="2"></i>
+            <i class="fa-solid fa-star star" data-value="3"></i>
+            <i class="fa-solid fa-star star" data-value="4"></i>
+            <i class="fa-solid fa-star star" data-value="5"></i>
+        </div>
+
+        <div id="message" style="min-height: 20px; font-weight: 500; color: var(--gold);"></div>
+
+        <!-- Hidden Negative Feedback Form -->
+        <form id="feedbackForm" class="hidden-form" onsubmit="submitFeedback(event)">
+            <p style="color: #fff; margin-bottom: 10px;">We're sorry to hear that. How can we make it right?</p>
+            <textarea name="feedback" placeholder="Tell us what went wrong..." required></textarea>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Feedback</button>
+        </form>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        const GOOGLE_REVIEW_LINK = "https://www.google.com/maps/place/VETERAN+GUTTERS+%26+GUARDS/@28.263538,-81.51839,17z/data=!4m8!3m7!1s0xab9e8c344a7d97d1:0xcc4e138a05311d0!8m2!3d28.263538!4d-81.51839!9m1!1b1!16s%2Fg%2F11yb0xwx01"; // Google Review URL
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', hoverStars);
+            star.addEventListener('click', clickStar);
+        });
+
+        function hoverStars(e) {
+            const val = e.target.getAttribute('data-value');
+            highlightStars(val);
+        }
+
+        function highlightStars(val) {
+            stars.forEach(s => {
+                const sVal = s.getAttribute('data-value');
+                s.classList.toggle('active', sVal <= val);
+            });
+        }
+
+        async function clickStar(e) {
+            const val = parseInt(e.target.getAttribute('data-value'));
+
+            // Remove listeners to lock choice
+            stars.forEach(s => s.replaceWith(s.cloneNode(true)));
+            highlightStars(val);
+
+            if (val >= 4) {
+                // THE NUKE: 4 or 5 Stars -> Google
+                document.getElementById('message').textContent = "That's what we like to hear! Redirecting...";
+                setTimeout(() => {
+                    window.location.href = GOOGLE_REVIEW_LINK;
+                }, 1500);
+            } else {
+                // CONTAINMENT: 1-3 Stars -> Internal Form
+                document.getElementById('message').textContent = "Thank you for your honesty.";
+                document.getElementById('feedbackForm').style.display = 'block';
+            }
+        }
+
+        async function submitFeedback(e) {
+            e.preventDefault();
+            const text = e.target.feedback.value;
+            const btn = e.target.querySelector('button');
+
+            btn.innerText = "Sending...";
+
+            try {
+                await fetch('/api/leads', { // Reusing leads endpoint to save feedback
+                    method: 'POST',
+                    body: JSON.stringify({ name: "Feedback", phone: "000-000-0000", service: "BAD REVIEW: " + text })
+                });
+                btn.innerText = "Thank You.";
+                setTimeout(() => window.location.href = "index.html", 2000);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+
+</html>
