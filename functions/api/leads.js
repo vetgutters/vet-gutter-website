@@ -144,7 +144,6 @@ async function sendEmailNotification(env, lead) {
         return "failed_network";
     }
 }
-}
 
 // --- Helper: The Wolf Protocol Trigger ---
 async function triggerWolfProtocol(env, originalRequest, lead) {
