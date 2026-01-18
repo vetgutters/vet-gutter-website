@@ -118,7 +118,12 @@ function openLightbox(element) {
 
 function closeLightbox(event) {
   // Close if clicked on background or close button, but not the image itself
-}
+  if (event.target.id === 'lightbox' || event.target.classList.contains('lightbox-close')) {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = ''; // Restore scrolling
+    }
   }
 }
 
