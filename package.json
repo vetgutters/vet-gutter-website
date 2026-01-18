@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "echo \"Build bypassed - Serving from root\""
+        "build": "npm install && echo \"Build bypassed - Serving from root\""
     },
     "keywords": [],
     "author": "",
