@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Portal | Veteran Gutters</title>
+    <meta name="description"
+        content="Exclusive Referral Program for Roofers, Realtors, and Contractors. Earn commissions for every closed job.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .portal-header {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .portal-container {
+            max-width: 600px;
+            margin: -40px auto 40px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .commission-badge {
+            background: var(--gold);
+            color: #000;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="portal-header">
+        <img src="assets/logo-shield.png" alt="Veteran Gutters" style="height: 60px; margin-bottom: 20px;">
+        <h1 style="font-family: 'Playfair Display', serif;">Partner Portal</h1>
+        <p style="opacity: 0.8;">Send a Lead. We Close It. You Get Paid.</p>
+    </div>
+
+    <div class="portal-container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div class="commission-badge">EARN $50 - $200 PER JOB</div>
+            <p style="font-size: 0.9rem; color: #666;">Use this form to submit a client referral. We will contact them
+                immediately.</p>
+        </div>
+
+        <form id="partnerForm">
+            <div class="form-group">
+                <label>Your Company / Name</label>
+                <input type="text" id="partnerName" placeholder="e.g. Apex Roofing" required>
+            </div>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+            <div class="form-group">
+                <label>Client Name</label>
+                <input type="text" id="clientName" placeholder="Client Name" required>
+            </div>
+
+            <div class="form-group">
+                <label>Client Phone</label>
+                <input type="tel" id="clientPhone" placeholder="Client Phone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Service Needed</label>
+                <select id="serviceType">
+                    <option value="Select">Select Service...</option>
+                    <option value="New Gutter Install">New Gutter Install</option>
+                    <option value="Gutter Guards">Gutter Guards</option>
+                    <option value="Repair">Repair</option>
+                    <option value="Cleaning">Cleaning</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Referral</button>
+        </form>
+    </div>
+
+    <div style="text-align: center; padding-bottom: 40px; color: #888; font-size: 0.8rem;">
+        &copy; 2024 Veteran Gutters & Guards • Partner Program
+    </div>
+
+    <script>
+        document.getElementById('partnerForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            const originalText = btn.innerText;
+            btn.innerText = "Submitting...";
+            btn.disabled = true;
+
+            const partner = document.getElementById('partnerName').value;
+            const client = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const service = document.getElementById('serviceType').value;
+
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: client,
+                        phone: phone,
+                        service: `REFERRAL from ${partner} - Needs: ${service}`
+                    })
+                });
+
+                if (res.ok) {
+                    alert("Referral Received! 🤝\n\nWe will track this lead and update you upon closing.");
+                    this.reset();
+                } else {
+                    alert("Error submitting referral.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Network error.");
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>
