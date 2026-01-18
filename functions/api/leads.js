@@ -56,6 +56,10 @@ export async function onRequest(context) {
         // --- Notification Logic ---
         const notificationResult = await sendEmailNotification(env, { name, phone, service });
 
+        // --- THE WOLF PROTOCOL (Instant Call) ---
+        // Fire and forget (don't block response)
+        triggerWolfProtocol(env, request, { name, phone, service });
+
         return new Response(JSON.stringify({
             success: true,
             message: 'Lead saved',
@@ -110,5 +114,24 @@ async function sendEmailNotification(env, lead) {
     } catch (e) {
         console.error("Email Fetch Error:", e);
         return "failed_network";
+    }
+}
+}
+
+// --- Helper: The Wolf Protocol Trigger ---
+async function triggerWolfProtocol(env, originalRequest, lead) {
+    try {
+        const url = new URL(originalRequest.url);
+        const wolfUrl = `${url.protocol}//${url.host}/api/wolf`;
+
+        // Fire and forget fetch to our own API
+        fetch(wolfUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(lead)
+        }).catch(err => console.error("Wolf Trigger Error:", err));
+
+    } catch (e) {
+        console.error("Wolf Setup Error:", e);
     }
 }
