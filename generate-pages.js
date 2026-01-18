@@ -4,107 +4,521 @@ const path = require('path');
 // --- 1. Target Neighborhoods (The "Sprawl") ---
 const neighborhoods = [
     // The Villages
+    { name: "The Villages", slug: "the-villages", area: "The Villages" },
     { name: "Village of Fenney", slug: "village-of-fenney", area: "The Villages" },
     { name: "Village of Marsh Bend", slug: "village-of-marsh-bend", area: "The Villages" },
     { name: "Village of Monarch Grove", slug: "village-of-monarch-grove", area: "The Villages" },
     { name: "Village of DeLuna", slug: "village-of-deluna", area: "The Villages" },
     { name: "Village of Citrus Grove", slug: "village-of-citrus-grove", area: "The Villages" },
     // Ocala HOAs
+    { name: "Ocala", slug: "ocala", area: "Ocala" },
     { name: "On Top of the World", slug: "on-top-of-the-world", area: "Ocala" },
     { name: "Stone Creek", slug: "stone-creek", area: "Ocala" },
     { name: "Oak Run", slug: "oak-run", area: "Ocala" },
     { name: "Pine Run", slug: "pine-run", area: "Ocala" },
-    { name: "Marion Landing", slug: "marion-landing", area: "Ocala" }
+    { name: "Marion Landing", slug: "marion-landing", area: "Ocala" },
+    // Surrounding Cities
+    { name: "Belleview", slug: "belleview", area: "Marion County" },
+    { name: "Dunnellon", slug: "dunnellon", area: "Marion County" },
+    { name: "Lady Lake", slug: "lady-lake", area: "Lake County" },
+    { name: "Wildwood", slug: "wildwood", area: "Sumter County" },
+    { name: "Leesburg", slug: "leesburg", area: "Lake County" },
+    { name: "Summerfield", slug: "summerfield", area: "Marion County" },
+    { name: "Fruitland Park", slug: "fruitland-park", area: "Lake County" },
+    { name: "Oxford", slug: "oxford", area: "Sumter County" },
+    { name: "Inverness", slug: "inverness", area: "Citrus County" },
+    { name: "Hernando", slug: "hernando", area: "Citrus County" },
+    { name: "Citrus Springs", slug: "citrus-springs", area: "Citrus County" },
+    { name: "Silver Springs", slug: "silver-springs-shores", area: "Marion County" },
+    { name: "Marion Oaks", slug: "marion-oaks", area: "Marion County" }
 ];
 
-// --- 2. Template (Using Ocala content as base) ---
+// --- 2. Premium Template (Based on index.html) ---
+// We replace:
+// - "Ocala" -> {{NAME}}
+// - "FL" -> "FL" (Keep state)
+// - Paths "assets/" -> "../assets/"
+// - Paths "styles.css" -> "../styles.css"
+// - Links to index -> "../index.html"
+// - Links to sections -> "../index.html#section"
+
 const template = `<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gutter Guards & Installation in {{NAME}} | Veteran Gutters</title>
-    <meta name="description" content="Veteran-owned seamless gutter installation and leaf guards for homes in {{NAME}}. Protect your property with Ocala's most trusted veteran team.">
+    <title>Veteran Gutters & Guards - {{NAME}}, FL</title>
+    <meta name="description"
+        content="Veteran-owned gutter installation and repair services in {{NAME}}, FL. Seamless gutters, guards, fascia, and soffit repairs. Licensed, insured, and warranty-backed.">
     <link rel="canonical" href="https://veterangutterguards.com/locations/{{SLUG}}.html" />
-    
-    <!-- Open Graph -->
-    <meta property="og:title" content="Gutter Guards in {{NAME}} - Veteran Owned">
-    <meta property="og:description" content="Serving {{NAME}} with military precision. Seamless gutters and micro-mesh guards. Free estimates.">
+
+    <!-- Open Graph (Social Sharing) -->
+    <meta property="og:title" content="Veteran Gutters & Guards - {{NAME}}'s #1 Rated Gutter Experts">
+    <meta property="og:description"
+        content="Veteran-owned seamless gutters and leaf protection. Serving {{NAME}} and {{AREA}}. Get a free estimate today.">
+    <meta property="og:image" content="https://veterangutterguards.com/assets/photos/hero-new.jpg">
     <meta property="og:url" content="https://veterangutterguards.com/locations/{{SLUG}}.html">
     <meta property="og:type" content="website">
 
-    <!-- Fonts/CSS -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
+        rel="stylesheet">
 
-    <!-- Nav -->
+    <link rel="stylesheet" href="../styles.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Gutter Installation",
+      "provider": {
+        "@type": "LocalBusiness",
+        "name": "Veteran Gutters & Guards",
+        "image": "https://veterangutterguards.com/assets/photos/hero-new.jpg",
+        "telephone": "321-278-7996",
+        "url": "https://veterangutterguards.com/locations/{{SLUG}}.html",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "{{NAME}}",
+            "addressRegion": "FL",
+            "addressCountry": "US"
+        },
+        "priceRange": "$$"
+      },
+      "areaServed": {
+        "@type": "City",
+        "name": "{{NAME}}"
+      },
+      "description": "Veteran-owned gutter installation, repair, and protection services in {{NAME}} and surrounding areas. Licensed & Insured."
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TRDCL56J" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- 1) Sticky Top Bar -->
     <header class="sticky-nav">
         <div class="container nav-container">
             <a href="../index.html" class="brand">
+                <!-- Icon + Text -->
                 <img src="../assets/logo-shield.png" alt="Veteran Gutters Shield" class="brand-logo">
-                <span class="brand-text">Veteran Gutters</span>
+                <span class="brand-text">Veteran Gutters & Guards</span>
             </a>
+
             <nav class="desktop-nav">
-                <a href="../index.html">Home</a>
+                <a href="../about.html">About</a>
                 <a href="../index.html#services">Services</a>
-                <a href="../index.html#contact" class="btn btn-primary">Get Quote ></a>
+                <a href="../index.html#reviews">Reviews</a>
+                <a href="../club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
+                <a href="../gallery.html">Gallery</a>
+                <a href="../index.html#contact">Contact</a>
             </nav>
+
+            <div class="nav-right">
+                <a href="tel:3212787996" class="btn btn-outline"><i class="fa-solid fa-phone"></i> (321) 278-7996</a>
+                <button class="hamburger" aria-label="Menu" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="../about.html">About</a>
+            <a href="../index.html#services">Services</a>
+            <a href="../index.html#reviews">Reviews</a>
+            <a href="../club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
+            <a href="../gallery.html">Gallery</a>
+            <a href="../index.html#contact">Contact</a>
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="hero-section" style="min-height: 60vh;">
+    <!-- STORM PROTOCOL BANNER (Hidden by default) -->
+    <div id="stormBanner" class="storm-banner" style="display: none;">
+        <div class="container storm-content">
+            <div class="storm-icon"><i class="fa-solid fa-cloud-showers-heavy"></i></div>
+            <div class="storm-text">
+                <strong>Storm Alert:</strong> <span id="stormMessage">Heavy rain detected in {{NAME}}.</span>
+                <span class="storm-cta">Spot a leak? Get a Priority Inspection.</span>
+            </div>
+            <a href="#contact" class="storm-btn">Check My Roof ></a>
+        </div>
+    </div>
+
+    <!-- 2) Hero Section -->
+    <section class="hero-section">
         <div class="container hero-container">
             <div class="hero-content">
-                <div class="veteran-badge"><i class="fa-solid fa-medal"></i> Serving {{NAME}}</div>
-                <h1>Expert Gutter Solutions for <span style="color: var(--gold);">{{NAME}}</span> Homes</h1>
-                <p class="hero-subtext">We specialize in seamless gutters and leaf protection systems designed specifically for properties in {{NAME}} and {{AREA}}.</p>
-                
-                <a href="../index.html#hero-form" class="btn btn-primary btn-large">Get A Free Estimate ></a>
-                
-                <div class="mini-trust-icons" style="margin-top: 20px;">
-                    <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> HOA Compliant</span>
-                    <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> Licensed</span>
+                <div class="veteran-badge">
+                    <i class="fa-solid fa-medal"></i> Serving {{NAME}}
+                </div>
+                <h1>Protect Your <span style="color: var(--gold);">{{NAME}}</span> Home</h1>
+                <p class="hero-subtext">Veteran-owned gutter installation and leaf protection. We don't just hang
+                    gutters; we engineer water management systems for {{NAME}} properties.</p>
+                <div id="hero-form" class="power-form-wrapper">
+                    <div class="power-form-header">
+                        <h3>Get Your Free Quote</h3>
+                        <p>Fast • Precise • 100% Free</p>
+                    </div>
+                    <form id="leadForm" onsubmit="handleLeadSubmit(event)">
+                        <div class="pf-group">
+                            <input type="text" name="name" class="pf-input" placeholder="Your Name" required>
+                        </div>
+                        <div class="pf-group">
+                            <input type="tel" name="phone" class="pf-input" placeholder="Phone Number" required>
+                        </div>
+                        <div class="pf-group">
+                            <select name="service" class="pf-select">
+                                <option value="Seamless Gutters">New Seamless Gutters</option>
+                                <option value="Gutter Guards">Gutter Guards</option>
+                                <option value="Repairs">Repairs & Cleaning</option>
+                            </select>
+                        </div>
+                        <!-- IMPORTANT: Hidden field to track source -->
+                        <input type="hidden" name="source_page" value="Location: {{NAME}}">
+                        
+                        <button type="submit" class="pf-submit">Get My Price ></button>
+                        <div class="secure-note">
+                            <i class="fa-solid fa-lock"></i> Your info is 100% secure.
+                        </div>
+                    </form>
+                    <!-- Mini Trust Icons -->
+                    <div class="mini-trust-icons">
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> Licensed</span>
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> Insured</span>
+                        <span><i class="fa-solid fa-check-circle" style="color: var(--gold);"></i> 5-Star Rated</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="hero-image-wrapper">
+                <img src="../assets/photos/hero-new.jpg" alt="Technician measuring house for gutter installation"
+                    class="hero-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Sticky Mobile CTA -->
+    <div class="mobile-cta-bar">
+        <a href="tel:3212787996" class="mobile-cta-btn cta-call">
+            <i class="fa-solid fa-phone"></i> Call
+        </a>
+        <a href="#hero-form" class="mobile-cta-btn cta-quote"
+            onclick="document.querySelector('#hero-form').scrollIntoView({behavior: 'smooth'})">
+            <i class="fa-solid fa-file-invoice-dollar"></i> Get Quote
+        </a>
+    </div>
+
+    <!-- Trust Badges Strip -->
+    <section
+        style="background: #111; padding: 40px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+        <div class="container"
+            style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; text-align: center;">
+            <div>
+                <i class="fa-solid fa-certificate"
+                    style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5 style="color: #fff; font-size: 1.1rem;">Licensed & Insured</h5>
+            </div>
+            <div>
+                <i class="fa-solid fa-star" style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5 style="color: #fff; font-size: 1.1rem;">5-Star Rated</h5>
+            </div>
+            <div>
+                <i class="fa-solid fa-hands-holding-circle"
+                    style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
+                <h5 style="color: #fff; font-size: 1.1rem;">Lifetime Warranty</h5>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3) Our Services -->
+    <section id="services" class="services-section">
+        <div class="container">
+
+            <div class="section-header">
+                <h2>Our Services in {{NAME}}</h2>
+            </div>
+
+            <div class="services-container">
+                <!-- Left Feature Card -->
+                <div class="service-feature-card animate-on-scroll">
+                    <div class="feature-img-wrapper">
+                        <img src="../assets/service-seamless-gutters.jpg" alt="Seamless Gutter Installation"
+                            loading="lazy">
+                    </div>
+                    <div class="feature-content">
+                        <h3>Seamless Gutter Installation</h3>
+                        <p>Custom seamless aluminum gutters fabricated on site for a perfect, durable fit.</p>
+                        <ul class="check-list">
+                            <li>Veteran Owned • Licensed & Insured</li>
+                            <li>Warranty-Backed Work • Serving {{NAME}}</li>
+                        </ul>
+                        <div style="margin-top: 20px;">
+                            <a href="../services/seamless-gutters.html" class="btn btn-outline"
+                                style="font-size: 0.8rem; padding: 8px 20px;">Learn More ></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Grid -->
+                <div class="services-grid animate-on-scroll delay-100">
+                    <!-- Gutter Guards -->
+                    <a href="../services/gutter-guards.html" class="service-card">
+                        <div class="card-img-wrapper">
+                            <img src="../assets/service-gutter-guards.jpg" alt="Gutter Guards" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <i class="fa-solid fa-house-chimney card-icon"></i>
+                                <h4>Gutter Guards</h4>
+                            </div>
+                            <p>Professionally installed guards protect gutters from debris.</p>
+                        </div>
+                    </a>
+
+                    <!-- Gutter Repairs -->
+                    <a href="../services/repairs.html" class="service-card">
+                        <div class="card-img-wrapper">
+                            <img src="../assets/service-gutter-repairs.jpg" alt="Gutter Repairs" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <i class="fa-solid fa-hammer card-icon"></i>
+                                <h4>Gutter Repairs</h4>
+                            </div>
+                            <p>We specialize in fixing leaks caused by sag or storm damage.</p>
+                        </div>
+                    </a>
+
+                    <!-- Fascia & Soffit -->
+                    <a href="../services/fascia-soffit.html" class="service-card">
+                        <div class="card-img-wrapper">
+                            <img src="../assets/photos/service-fascia.png" alt="Fascia & Soffit" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <i class="fa-solid fa-house card-icon"></i>
+                                <h4>Fascia & Soffit</h4>
+                            </div>
+                            <p>Repairs or replaced soffit to maintain roofline integrity.</p>
+                        </div>
+                    </a>
+
+                    <!-- 4th Grid Item -->
+                    <a href="../gallery.html" class="service-card">
+                        <div class="card-img-wrapper">
+                            <img src="../assets/project-overview.jpg" alt="Our Work" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-header">
+                                <i class="fa-solid fa-star card-icon"></i>
+                                <h4>Our Past Projects</h4>
+                            </div>
+                            <p>See why {{NAME}} homeowners trust us with their biggest asset.</p>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Content -->
-    <section class="section">
+    <!-- 4) Our Simple Estimate Process -->
+    <section class="process-section">
+        <div class="section-header">
+            <h2>Our Simple Estimate Process</h2>
+        </div>
+
         <div class="container">
-            <h2>Why {{NAME}} Homeowners Choose Us</h2>
-            <p>Living in <strong>{{NAME}}</strong> means enjoying a beautiful community, but it also means dealing with Florida's heavy storms. Improper drainage can damage your foundation and landscaping.</p>
-            <p>Veteran Gutters provides:</p>
-            <ul class="check-list" style="margin: 20px 0;">
-                <li><strong>HOA-Approved Colors:</strong> We match your home's palette perfectly.</li>
-                <li><strong>Seamless Aluminum:</strong> No leaks, custom-measured for your exact roofline.</li>
-                <li><strong>Micro-Mesh Guards:</strong> Never climb a ladder to clean leaves again.</li>
-            </ul>
+            <div class="process-banner animate-on-scroll">
+                <img src="../assets/project-overview.jpg" alt="Our Work Banner" class="banner-img">
+                <div class="banner-overlay">
+                    <div class="container banner-content">
+                        <h2 class="banner-title">See Our Work in {{NAME}}</h2>
+                        <p class="banner-subtitle">Serving {{NAME}}, {{AREA}}, and surrounding communities.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="steps-row animate-on-scroll delay-100">
+                <div class="step-item">
+                    <div class="step-number">1.</div>
+                    <div class="step-content">
+                        <h4>Request a Free Estimate</h4>
+                        <p>Easy online form for estimate we preferred times.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2.</div>
+                    <div class="step-content">
+                        <h4>Choose a Time Window</h4>
+                        <p>Select a convenient preferred time window start.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3.</div>
+                    <div class="step-content">
+                        <h4>On-Site Evaluation</h4>
+                        <p>We evaluate and recommend solutions.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Reviews Section -->
+    <section id="reviews" class="section" style="background-color: var(--bg-card);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Neighbors Trust Us</h2>
+            </div>
+
+            <div class="reviews-grid animate-on-scroll"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px;">
+                <!-- Review 1 -->
+                <div class="review-card"
+                    style="background: #1a1a1a; padding: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="color: var(--gold);">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <span
+                            style="font-size: 0.75rem; color: #aaa; border: 1px solid #444; padding: 2px 8px; border-radius: 4px;">Verified
+                            <i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <p style="font-style: italic; margin-bottom: 20px;">"Veteran Gutters did an amazing job on our home.
+                        The seamless gutters look fantastic and the crew was professional and efficient."</p>
+                    <div style="font-weight: 600;">- James P.</div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-card"
+                    style="background: #1a1a1a; padding: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-light);">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div style="color: var(--gold);">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i
+                                class="fa-solid fa-star"></i>
+                        </div>
+                        <span
+                            style="font-size: 0.75rem; color: #aaa; border: 1px solid #444; padding: 2px 8px; border-radius: 4px;">Verified
+                            <i class="fa-solid fa-check"></i></span>
+                    </div>
+                    <p style="font-style: italic; margin-bottom: 20px;">"Great communication and excellent workmanship.
+                        Highly recommend for anyone needing gutter guards."</p>
+                    <div style="font-weight: 600;">- Michael T.</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://www.google.com/maps/place/VETERAN+GUTTERS+%26+GUARDS/@28.263538,-81.51839,17z/data=!4m8!3m7!1s0xab9e8c344a7d97d1:0xcc4e138a05311d0!8m2!3d28.263538!4d-81.51839!9m1!1b1!16s%2Fg%2F11yb0xwx01"
+                    target="_blank" class="btn btn-outline">Read More Reviews</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5) Final CTA -->
+    <section id="contact" class="final-cta-section animate-on-scroll">
+        <div class="container cta-container">
+            <h2>Ready to protect your {{NAME}} home?</h2>
+            <br>
+            <a href="tel:3212787996" class="btn btn-primary btn-large">Request a Free Estimate ></a>
+        </div>
+    </section>
+
+    <!-- 6) Footer -->
     <footer>
         <div class="container footer-content">
-            <p>&copy; 2024 Veteran Gutters & Guards • Serving {{NAME}} and all of {{AREA}}.</p>
+            <p>&copy; 2024 Veteran Gutters & Guards • Licensed & Insured • Serving {{NAME}}.</p>
+            <p style="font-size: 0.8rem; margin-top: 10px;">
+                <a href="../admin/index.html" style="color: #666; text-decoration: none; margin-right: 15px;">Admin</a>
+                <a href="../partners.html" style="color: #666; text-decoration: none;">Partner Portal</a>
+            </p>
         </div>
     </footer>
 
     <script src="../ChatWidget.js"></script>
     <script src="../scripts.js"></script>
+    <!-- Deployment Trigger v2: Fix Mobile Width -->
+    <script>
+        /* --- Lead Form Handling (Inline) --- */
+        async function handleLeadSubmit(event) {
+            event.preventDefault();
+            const form = event.target;
+            const btn = form.querySelector('button[type="submit"]');
+            const originalText = btn.innerText;
+
+            const data = {
+                name: form.name.value,
+                phone: form.phone.value,
+                service: form.service.value
+                // source_page provided hidden
+            };
+
+            btn.innerText = "Sending...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    btn.innerText = "Received! Expect a Call shortly.";
+                    btn.style.background = "linear-gradient(45deg, #11998e, #38ef7d)"; // Success Green
+                    btn.style.color = "#fff";
+                    form.reset();
+                    setTimeout(() => {
+                        btn.innerText = originalText;
+                        btn.style.background = ""; // Reset
+                        btn.style.color = "";
+                        btn.disabled = false;
+                    }, 5000);
+                } else {
+                    throw new Error(result.error || "Submission failed");
+                }
+            } catch (err) {
+                console.error(err);
+                btn.innerText = "Error. Please Call Us Instead.";
+                btn.style.background = "#f44336"; // Red
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                    btn.disabled = false;
+                }, 3000);
+            }
+        }
+    </script>
 </body>
 </html>`;
 
 // --- 3. Generation Loop ---
 const outputDir = path.join(__dirname, 'locations');
+if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+}
 
-console.log(`🚀 Starting Operation Sprawl... Generating ${neighborhoods.length} pages.`);
+console.log(`🚀 Starting Unified Design Generator... Generating ${neighborhoods.length} premium pages.`);
 
 neighborhoods.forEach(hood => {
     let content = template
@@ -114,7 +528,7 @@ neighborhoods.forEach(hood => {
 
     const filePath = path.join(outputDir, `${hood.slug}.html`);
     fs.writeFileSync(filePath, content);
-    console.log(`✅ Created: ${hood.slug}.html`);
+    console.log(`✅ Created Premium Page: ${hood.slug}.html`);
 });
 
-console.log("Mission Complete. 🦅");
+console.log("Mission Complete. 🦅 Visual Unification Achieved.");
