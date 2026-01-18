@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Center | Veteran Gutters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1a1a1a;
+            --bg-card: #252525;
+            --gold: #D4AF37;
+            --text: #f0f0f0;
+            --border: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Login Overlay */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-box {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--gold);
+        }
+
+        input {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #444;
+            background: #111;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: var(--gold);
+            color: #000;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Dashboard */
+        header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #333;
+            color: var(--gold);
+        }
+
+        tr:hover {
+            background: #2a2a2a;
+        }
+
+        .status-new {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .action-btn {
+            text-decoration: none;
+            color: #fff;
+            background: #333;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Security Check -->
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2 style="margin-bottom: 15px; color: var(--gold);">COMMAND CENTER</h2>
+            <input type="password" id="password" placeholder="Enter Access Code">
+            <br>
+            <button onclick="checkAccess()">Enter</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <header>
+        <h3>Lead Management</h3>
+        <button onclick="fetchLeads()" style="font-size: 0.8rem; padding: 5px 10px;">Refresh</button>
+    </header>
+
+    <div class="dashboard-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Interested In</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="leadsTable">
+                <tr>
+                    <td colspan="5" style="text-align:center;">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function checkAccess() {
+            const pwd = document.getElementById('password').value;
+            // "VETS2024" - Simple client-side gate (Not secure for sensitive PII in production, but okay for MVP)
+            if (pwd === 'VETS2024') {
+                document.getElementById('loginOverlay').style.display = 'none';
+                fetchLeads();
+            } else {
+                alert('Access Denied');
+            }
+        }
+
+        async function fetchLeads() {
+            const tableBody = document.getElementById('leadsTable');
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">Fetching Data...</td></tr>';
+
+            try {
+                const res = await fetch('/api/leads');
+                if (!res.ok) throw new Error('Failed to fetch');
+                const leads = await res.json();
+
+                if (leads.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No leads found.</td></tr>';
+                    return;
+                }
+
+                tableBody.innerHTML = leads.map(lead => `
+                    <tr>
+                        <td>${new Date(lead.created_at).toLocaleDateString()} ${new Date(lead.created_at).toLocaleTimeString()}</td>
+                        <td style="font-weight:600;">${lead.name}</td>
+                        <td><a href="tel:${lead.phone}" style="color:var(--gold);">${lead.phone}</a></td>
+                        <td>${lead.notes || lead.service || '-'}</td>
+                        <td>
+                            <a href="tel:${lead.phone}" class="action-btn">📞 Call</a>
+                        </td>
+                    </tr>
+                `).join('');
+
+            } catch (err) {
+                console.error(err);
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">Error loading leads.</td></tr>';
+            }
+        }
+
+        // Allow "Enter" key for password
+        document.getElementById('password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkAccess();
+        });
+    </script>
+</body>
+
+</html>

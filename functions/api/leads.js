@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 export async function onRequest(context) {
     const { request, env } = context;
 
-    if (request.method !== 'POST') {
+    if (request.method !== 'POST' && request.method !== 'GET') {
         return new Response('Method Not Allowed', { status: 405 });
     }
 
@@ -14,6 +14,25 @@ export async function onRequest(context) {
         return new Response(JSON.stringify({ error: 'Server misconfiguration' }), { status: 500 });
     }
 
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // --- GET: Fetch All Leads (Admin) ---
+    if (request.method === 'GET') {
+        const { data, error } = await supabase
+            .from('leads')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+        }
+
+        return new Response(JSON.stringify(data), {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+
+    // --- POST: Create New Lead ---
     try {
         const formData = await request.json();
         const { name, phone, service } = formData;
@@ -21,8 +40,6 @@ export async function onRequest(context) {
         if (!name || !phone) {
             return new Response(JSON.stringify({ error: 'Name and Phone are required' }), { status: 400 });
         }
-
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         const { error } = await supabase.from('leads').insert([{
             name: name,
