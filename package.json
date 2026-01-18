@@ -11,8 +11,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "@supabase/supabase-js": "^2.39.0",
-        "googleapis": "^129.0.0",
-        "openai": "^4.20.1"
+        "@supabase/supabase-js": "^2.39.0"
     }
 }
