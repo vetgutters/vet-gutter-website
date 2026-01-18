@@ -147,11 +147,18 @@
 
     <!-- Main Dashboard -->
     <header>
-        <h3>Lead Management</h3>
-        <button onclick="fetchLeads()" style="font-size: 0.8rem; padding: 5px 10px;">Refresh</button>
+        <h3>Command Center</h3>
+        <div>
+            <button onclick="showTab('leads')" id="btnLeads" style="background:var(--gold);">Leads</button>
+            <button onclick="showTab('projects')" id="btnProjects" style="background:#555; color:#fff;">Add
+                Project</button>
+            <button onclick="fetchLeads()"
+                style="font-size: 0.8rem; padding: 5px 10px; margin-left:10px;">Refresh</button>
+        </div>
     </header>
 
-    <div class="dashboard-container">
+    <!-- TAB: LEADS -->
+    <div id="tabLeads" class="dashboard-container">
         <table>
             <thead>
                 <tr>
@@ -170,16 +177,46 @@
         </table>
     </div>
 
+    <!-- TAB: PROJECTS -->
+    <div id="tabProjects" class="dashboard-container" style="display:none; text-align:center;">
+        <div class="login-box" style="margin: 0 auto; max-width: 500px; text-align: left;">
+            <h3 style="color:var(--gold); margin-bottom:20px;">Add to Portfolio</h3>
+
+            <label style="display:block; margin-bottom:5px;">Project Title</label>
+            <input type="text" id="projTitle" placeholder="e.g. Copper Gutters in The Villages" style="width:100%;">
+
+            <label style="display:block; margin-bottom:5px;">Image URL</label>
+            <input type="text" id="projImg" placeholder="https://..." style="width:100%;">
+            <p style="font-size:0.8rem; color:#aaa; margin-top:-5px; margin-bottom:10px;">Paste a link from your Google
+                Photos or Business Profile.</p>
+
+            <label style="display:block; margin-bottom:5px;">Description</label>
+            <input type="text" id="projDesc" placeholder="Brief details..." style="width:100%;">
+
+            <button onclick="submitProject()" style="width:100%; margin-top:10px;">🚀 Publish to Gallery</button>
+        </div>
+    </div>
+
     <script>
         function checkAccess() {
             const pwd = document.getElementById('password').value;
-            // "VETS2024" - Simple client-side gate (Not secure for sensitive PII in production, but okay for MVP)
+            // "VETS2024" - Simple client-side gate
             if (pwd === 'VETS2024') {
                 document.getElementById('loginOverlay').style.display = 'none';
                 fetchLeads();
             } else {
                 alert('Access Denied');
             }
+        }
+
+        // Tab Switching
+        function showTab(tab) {
+            document.getElementById('tabLeads').style.display = tab === 'leads' ? 'block' : 'none';
+            document.getElementById('tabProjects').style.display = tab === 'projects' ? 'block' : 'none';
+
+            // Update Buttons
+            document.getElementById('btnLeads').style.background = tab === 'leads' ? 'var(--gold)' : '#555';
+            document.getElementById('btnProjects').style.background = tab === 'projects' ? 'var(--gold)' : '#555';
         }
 
         async function fetchLeads() {
@@ -208,15 +245,50 @@
                         </td>
                     </tr>
                 `).join('');
+
+                // Run Strategy if present (Ghost Advisor)
+                if (typeof updateStrategy === 'function') updateStrategy(leads);
+
             } catch (err) {
                 console.error(err);
                 tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: red;">Error loading leads.</td></tr>';
             }
         }
 
+        async function submitProject() {
+            const title = document.getElementById('projTitle').value;
+            const image_url = document.getElementById('projImg').value;
+            const description = document.getElementById('projDesc').value;
+
+            if (!title || !image_url) {
+                alert("Please provide a Title and Image URL.");
+                return;
+            }
+
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ type: 'project', title, image_url, description })
+                });
+
+                if (res.ok) {
+                    alert("Project Published! Check the Gallery.");
+                    document.getElementById('projTitle').value = '';
+                    document.getElementById('projImg').value = '';
+                    document.getElementById('projDesc').value = '';
+                } else {
+                    alert("Failed to publish.");
+                }
+            } catch (e) {
+                console.error(e);
+                alert("Error submitting project.");
+            }
+        }
+
         function copyReviewLink(phone) {
             const link = "https://veterangutterguards.com/feedback.html";
-            const text = `Hi, this is Jesse from Veteran Gutters.Thanks for choosing us! Could you take a moment to rate your experience ? ${link}`;
+            const text = `Hi, this is Jesse from Veteran Gutters. Thanks for choosing us! Could you take a moment to rate your experience? ${link}`;
 
             navigator.clipboard.writeText(text).then(() => {
                 alert("Review Request Copied to Clipboard!\n\nPaste it into a text message.");

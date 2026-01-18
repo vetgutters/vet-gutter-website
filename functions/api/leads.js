@@ -16,8 +16,21 @@ export async function onRequest(context) {
 
     const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // --- GET: Fetch All Leads (Admin) ---
+    // --- GET: Fetch Resources (Leads OR Projects) ---
     if (request.method === 'GET') {
+        const url = new URL(request.url);
+        const type = url.searchParams.get('type') || 'leads';
+
+        if (type === 'projects') {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*')
+                .order('created_at', { ascending: false });
+            if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+            return new Response(JSON.stringify(data), { headers: { 'Content-Type': 'application/json' } });
+        }
+
+        // Default: Leads
         const { data, error } = await supabase
             .from('leads')
             .select('*')
@@ -32,9 +45,24 @@ export async function onRequest(context) {
         });
     }
 
-    // --- POST: Create New Lead ---
+    // --- POST: Create Resource (Leads OR Projects) ---
     try {
         const formData = await request.json();
+
+        // Check for Project Submission
+        if (formData.type === 'project') {
+            const { title, image_url, description } = formData;
+            const { error } = await supabase.from('projects').insert([{
+                title, image_url, description
+            }]);
+
+            if (error) return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+            return new Response(JSON.stringify({ success: true, message: 'Project Added' }), {
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        // Default: Create Lead
         const { name, phone, service } = formData;
 
         if (!name || !phone) {
