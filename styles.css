@@ -1065,14 +1065,21 @@ footer p {
     }
 }
 
+/* Default: Content is visible (Progressive Enhancement) */
 .animate-on-scroll {
-    opacity: 0;
-    transform: translateY(30px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
     will-change: opacity, transform;
 }
 
-.animate-on-scroll.is-visible {
+/* Only hide content IF JavaScript is running and has added this class */
+body.js-enabled .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+body.js-enabled .animate-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -1098,9 +1105,6 @@ footer p {
 .service-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
-    /* Gold glow */
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
-    /* Gold glow */
     border-color: var(--gold);
 }
 

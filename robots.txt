@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
 Sitemap: https://veterangutterguards.com/sitemap.xml
-Sitemap: https://veteranguttersguards.com/sitemap.xml

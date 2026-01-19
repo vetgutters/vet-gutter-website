@@ -127,27 +127,39 @@ function closeLightbox(event) {
   }
 }
 
-// --- Scroll Animation Observer ---
-const observerOptions = {
-  threshold: 0.1, // Trigger when 10% visible
-  rootMargin: "0px 0px -50px 0px" // Trigger slightly before entering bottom
-};
+// --- Scroll Animation Observer (Progressive Enhancement) ---
+// 1. Immediately signal that JS is active so CSS can hide elements for animation
+document.body.classList.add('js-enabled');
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      observer.unobserve(entry.target); // Run once
-    }
-  });
-}, observerOptions);
+document.addEventListener('DOMContentLoaded', () => {
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -20px 0px"
+  };
 
-const animatedElements = document.querySelectorAll('.animate-on-scroll');
-animatedElements.forEach(el => observer.observe(el));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const animatedElements = document.querySelectorAll('.animate-on-scroll');
+  animatedElements.forEach(el => observer.observe(el));
+
+  // Failsafe: Ensure content becomes visible even if observer hangs
+  setTimeout(() => {
+    document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(el => {
+      el.classList.add('is-visible');
+    });
+  }, 2000);
+});
 
 // Initialize Storm Protocol
 checkWeather();
-});
+
 
 // --- THE STORM PROTOCOL (Weather Logic) ---
 async function checkWeather() {

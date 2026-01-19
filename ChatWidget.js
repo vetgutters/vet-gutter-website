@@ -172,7 +172,7 @@ class ChatWidget {
         this.container.innerHTML = `
             <div class="chat-window" id="chatWindow">
                 <div class="chat-header">
-                    <img src="assets/logo-shield.png" alt="VGG">
+                    <img src="/assets/logo-shield.png" alt="VGG">
                     <h3>Veteran Schedule Assistant</h3>
                 </div>
                 <div class="chat-messages" id="chatMessages">
