@@ -218,21 +218,24 @@ neighborhoods.forEach(neighborhood => {
     // Strategy: We will ONLY replace specific "Serving Ocala" text usage that isn't a link.
     // actually, let's use the {{NAME}} pattern for specific text we know is in the body
 
-    // "Serving Ocala" (Veteran Badge)
-    pageContent = pageContent.replace('Serving Ocala', `Serving ${neighborhood.name}`);
+    // "Serving Ocala" (Veteran Badge) - NOT FOUND in current index, so this might be effectively doing nothing or hitting the wrong thing.
+    // Let's REMOVE the generic replace to avoid conflicts.
+    // pageContent = pageContent.replace('Serving Ocala', `Serving ${neighborhood.name}`);
 
     // "Our Services in Ocala" (Services Header)
-    // The index.html just says "Our Services". Let's make it local.
     pageContent = pageContent.replace('<h2>Our Services</h2>', `<h2>Our Services in ${neighborhood.name}</h2>`);
-
-    // "Serving Ocala & Nearby Areas" (Check list) - REPLACED BY getNeighbors LOGIC BELOW
-    // pageContent = pageContent.replace('Serving Ocala & Nearby Areas', `Serving ${neighborhood.name}`);
 
     // "See why Ocala homeowners trust us"
     pageContent = pageContent.replace('why Ocala homeowners', `why ${neighborhood.name} homeowners`);
 
-    // "See Our Work [in Ocala]" - index says "See Our Work"
+    // "See Our Work [in Ocala]"
     pageContent = pageContent.replace('<h2 class="banner-title">See Our Work</h2>', `<h2 class="banner-title">See Our Work in ${neighborhood.name}</h2>`);
+
+    // "See Our Work in Ocala" (Process Banner) -> The index might have "See Our Work in Ocala" if I edited it manually?
+    // Let's check: index.html has <h2 class="banner-title">See Our Work in Ocala</h2> (Line 326 in Step 2799 read)
+    // Wait, Step 2766 says <h2 class="banner-title">See Our Work</h2> (Line 328). 
+    // BUT the Step 2799 read of OCALA.HTML says "See Our Work in Ocala". 
+    // Standard Index likely has "See Our Work".
 
     // "Serving Ocala, The Villages, and..." (Banner Subtitle)
     pageContent = pageContent.replace(
@@ -241,32 +244,27 @@ neighborhoods.forEach(neighborhood => {
     );
 
     // --- Neighbor Injection (Service Card) ---
-    // Logic: If "The Villages", show other villages. If generic, show nearby cities.
     const getNeighbors = (current) => {
         let others = [];
         if (current.area === "The Villages") {
             others = neighborhoods.filter(n => n.area === "The Villages" && n.slug !== current.slug);
         } else {
-            // Pick some standard ones, excluding self and "The Villages" specifics if we want generic cities
-            // Let's just pick a mix of major ones: Ocala, Lady Lake, Dunnellon, Belleview
             const preffered = ['ocala', 'lady-lake', 'dunnellon', 'belleview', 'wildwood', 'leesburg'];
             others = neighborhoods.filter(n => preffered.includes(n.slug) && n.slug !== current.slug);
         }
-        // Take top 3
         return others.slice(0, 3);
     };
 
     const neighbors = getNeighbors(neighborhood);
-    // Create comma-separated links: <a href="slug.html" ...>Name</a>
     const neighborLinks = neighbors.map(n =>
         `<a href="${n.slug}.html" style="color:#aaa; text-decoration:underline; font-size:0.9em;">${n.name}</a>`
     ).join(', ');
 
-    // Target: "Serving Ocala & Nearby Areas" in the checklist
-    // We replace it with "Serving [Name]: [Links]"
+    // Target: "Serving Ocala: [Links]" in the seamless gutter card
+    // We use a regex to capture "Serving Ocala:" followed by the links until the closing </li>
     pageContent = pageContent.replace(
-        'Serving Ocala & Nearby Areas',
-        `Serving ${neighborhood.name}: ${neighborLinks}`
+        /Serving Ocala: <a[\s\S]*?<\/li>/,
+        `Serving ${neighborhood.name}: ${neighborLinks}</li>`
     );
 
     // "Ready to protect your [Ocala] home?" (Final CTA) -> Index says "Ready for a clear...?"
