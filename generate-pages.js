@@ -183,10 +183,10 @@ neighborhoods.forEach(neighborhood => {
         : `Veteran Gutters & Guards - ${neighborhood.name}'s #1 Rated Gutter Experts`;
 
     // Actually, let's just use a clean format: "Veteran Gutters & Guards - [City], FL" or similar
-    // The index has: "Veteran Gutters & Guards - Ocala's #1 Rated Gutter Experts"
+    // The index has: "Veteran Gutters & Guards - Ocala's #1 Rated
     pageContent = pageContent.replace(
-        /<meta property="og:title" content=".*?"/g,
-        `<meta property="og:title" content="${ogTitle}"`
+        /<meta property="og:title"[\s\S]*?content="[^"]*">/,
+        `<meta property="og:title" content="${ogTitle}">`
     );
 
     // 2. OG Description
@@ -196,20 +196,20 @@ neighborhoods.forEach(neighborhood => {
     let descText = override?.metaDesc || `Veteran-owned gutter installation and repair services in ${neighborhood.name}, FL. Seamless gutters, guards, fascia, and soffit repairs. Licensed, insured, and warranty-backed.`;
 
     pageContent = pageContent.replace(
-        /<meta property="og:description" content="[\s\S]*?"/g,
-        `<meta property="og:description" content="${descText}"`
+        /<meta property="og:description"[\s\S]*?content="[^"]*">/,
+        `<meta property="og:description" content="${descText}">`
     );
 
     // 3. Twitter Title
     pageContent = pageContent.replace(
-        /<meta name="twitter:title" content=".*?"/g,
-        `<meta name="twitter:title" content="${ogTitle}"`
+        /<meta name="twitter:title"[\s\S]*?content="[^"]*">/,
+        `<meta name="twitter:title" content="${ogTitle}">`
     );
 
     // 4. Twitter Description
     pageContent = pageContent.replace(
-        /<meta name="twitter:description" content="[\s\S]*?"/g,
-        `<meta name="twitter:description" content="${descText}"`
+        /<meta name="twitter:description"[\s\S]*?content="[^"]*">/,
+        `<meta name="twitter:description" content="${descText}">`
     );
 
     // City Name Injections (General)
