@@ -10,7 +10,7 @@ const neighborhoods = [
     { name: "Village of Monarch Grove", slug: "village-of-monarch-grove", area: "The Villages" },
     { name: "Village of DeLuna", slug: "village-of-deluna", area: "The Villages" },
     { name: "Ocala", slug: "ocala" },
-    { name: "The Villages", slug: "the-villages" },
+    // { name: "The Villages", slug: "the-villages" }, // REMOVED DUPLICATE
     { name: "Belleview", slug: "belleview" },
     { name: "Lady Lake", slug: "lady-lake" },
     { name: "Dunnellon", slug: "dunnellon" },
@@ -24,10 +24,6 @@ const neighborhoods = [
     { name: "Citrus Springs", slug: "citrus-springs" },
     { name: "Silver Springs Shores", slug: "silver-springs-shores" },
     { name: "Marion Oaks", slug: "marion-oaks" },
-    { name: "Village of Fenney", slug: "village-of-fenney" },
-    { name: "Village of Marsh Bend", slug: "village-of-marsh-bend" },
-    { name: "Village of Monarch Grove", slug: "village-of-monarch-grove" },
-    { name: "Village of DeLuna", slug: "village-of-deluna" },
     { name: "On Top of the World", slug: "on-top-of-the-world" },
     { name: "Stone Creek", slug: "stone-creek" },
     { name: "Oak Run", slug: "oak-run" },
@@ -179,6 +175,43 @@ neighborhoods.forEach(neighborhood => {
     // We replace the entire p.hero-subtext tag
     pageContent = pageContent.replace(/<p class="hero-subtext">[\s\S]*?<\/p>/, heroSubtext);
 
+    // --- Social Meta Tags Authorization ---
+    // 1. OG Title
+    // Pattern: <meta property="og:title" content="...">
+    let ogTitle = override?.heroTitle
+        ? `Veteran Gutters & Guards - ${neighborhood.name}, FL` // Fallback to standard format if override title is too HTML-heavy, or just use name
+        : `Veteran Gutters & Guards - ${neighborhood.name}'s #1 Rated Gutter Experts`;
+
+    // Actually, let's just use a clean format: "Veteran Gutters & Guards - [City], FL" or similar
+    // The index has: "Veteran Gutters & Guards - Ocala's #1 Rated Gutter Experts"
+    pageContent = pageContent.replace(
+        /<meta property="og:title" content=".*?"/g,
+        `<meta property="og:title" content="${ogTitle}"`
+    );
+
+    // 2. OG Description
+    // Use the same text as metaDesc content but stripped of HTML if any (metaDesc var includes the tag itself, we need just content)
+    // The metaDesc String we built earlier is `<meta name="description" content="...">`
+    // Let's extract the content or rebuild it.
+    let descText = override?.metaDesc || `Veteran-owned gutter installation and repair services in ${neighborhood.name}, FL. Seamless gutters, guards, fascia, and soffit repairs. Licensed, insured, and warranty-backed.`;
+
+    pageContent = pageContent.replace(
+        /<meta property="og:description" content="[\s\S]*?"/g,
+        `<meta property="og:description" content="${descText}"`
+    );
+
+    // 3. Twitter Title
+    pageContent = pageContent.replace(
+        /<meta name="twitter:title" content=".*?"/g,
+        `<meta name="twitter:title" content="${ogTitle}"`
+    );
+
+    // 4. Twitter Description
+    pageContent = pageContent.replace(
+        /<meta name="twitter:description" content="[\s\S]*?"/g,
+        `<meta name="twitter:description" content="${descText}"`
+    );
+
     // City Name Injections (General)
     // Replace "Ocala" with "{{NAME}}" in specific contexts if we missed any, 
     // BUT we must be careful not to break "Ocala" links in the footer or service area list.
@@ -192,8 +225,8 @@ neighborhoods.forEach(neighborhood => {
     // The index.html just says "Our Services". Let's make it local.
     pageContent = pageContent.replace('<h2>Our Services</h2>', `<h2>Our Services in ${neighborhood.name}</h2>`);
 
-    // "Serving Ocala & Nearby Areas" (Check list)
-    pageContent = pageContent.replace('Serving Ocala & Nearby Areas', `Serving ${neighborhood.name}`);
+    // "Serving Ocala & Nearby Areas" (Check list) - REPLACED BY getNeighbors LOGIC BELOW
+    // pageContent = pageContent.replace('Serving Ocala & Nearby Areas', `Serving ${neighborhood.name}`);
 
     // "See why Ocala homeowners trust us"
     pageContent = pageContent.replace('why Ocala homeowners', `why ${neighborhood.name} homeowners`);
@@ -205,6 +238,35 @@ neighborhoods.forEach(neighborhood => {
     pageContent = pageContent.replace(
         'Serving Ocala, The Villages, and surrounding communities.',
         `Serving ${neighborhood.name} and surrounding communities.`
+    );
+
+    // --- Neighbor Injection (Service Card) ---
+    // Logic: If "The Villages", show other villages. If generic, show nearby cities.
+    const getNeighbors = (current) => {
+        let others = [];
+        if (current.area === "The Villages") {
+            others = neighborhoods.filter(n => n.area === "The Villages" && n.slug !== current.slug);
+        } else {
+            // Pick some standard ones, excluding self and "The Villages" specifics if we want generic cities
+            // Let's just pick a mix of major ones: Ocala, Lady Lake, Dunnellon, Belleview
+            const preffered = ['ocala', 'lady-lake', 'dunnellon', 'belleview', 'wildwood', 'leesburg'];
+            others = neighborhoods.filter(n => preffered.includes(n.slug) && n.slug !== current.slug);
+        }
+        // Take top 3
+        return others.slice(0, 3);
+    };
+
+    const neighbors = getNeighbors(neighborhood);
+    // Create comma-separated links: <a href="slug.html" ...>Name</a>
+    const neighborLinks = neighbors.map(n =>
+        `<a href="${n.slug}.html" style="color:#aaa; text-decoration:underline; font-size:0.9em;">${n.name}</a>`
+    ).join(', ');
+
+    // Target: "Serving Ocala & Nearby Areas" in the checklist
+    // We replace it with "Serving [Name]: [Links]"
+    pageContent = pageContent.replace(
+        'Serving Ocala & Nearby Areas',
+        `Serving ${neighborhood.name}: ${neighborLinks}`
     );
 
     // "Ready to protect your [Ocala] home?" (Final CTA) -> Index says "Ready for a clear...?"
