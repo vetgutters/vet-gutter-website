@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Veteran Gutters & Guards Service Area</name>
+    <description>Service area covering Marion, Sumter, and Lake Counties including Ocala, The Villages, and Belleview.</description>
+    <Style id="serviceAreaStyle">
+      <LineStyle>
+        <color>ff0000ff</color>
+        <width>2</width>
+      </LineStyle>
+      <PolyStyle>
+        <color>400000ff</color>
+      </PolyStyle>
+    </Style>
+    <Placemark>
+      <name>Marion & Sumter Core Service Area</name>
+      <styleUrl>#serviceAreaStyle</styleUrl>
+      <Polygon>
+        <outerBoundaryIs>
+          <LinearRing>
+            <coordinates>
+              -82.4744,29.4182,0
+              -81.8687,29.4182,0
+              -81.8687,28.6253,0
+              -82.4744,28.6253,0
+              -82.4744,29.4182,0
+            </coordinates>
+          </LinearRing>
+        </outerBoundaryIs>
+      </Polygon>
+    </Placemark>
+    <Placemark>
+      <name>Veteran Gutters HQ</name>
+      <Point>
+        <coordinates>-82.1401,29.1872,0</coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

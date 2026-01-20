@@ -272,6 +272,9 @@
                             <label for="lead-name" class="sr-only">Your Name</label>
                             <input type="text" id="lead-name" name="name" class="pf-input" placeholder="Your Name"
                                 required autocomplete="name">
+                            <!-- Honeypot for Spam Defense (Round 7) -->
+                            <input type="text" name="website_honey" style="display:none !important;" tabindex="-1"
+                                autocomplete="off">
                         </div>
                         <div class="pf-group">
                             <input type="tel" name="phone" class="pf-input" placeholder="Phone Number" required>
@@ -738,7 +741,8 @@
         <div class="container"
             style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem;">
             <p>&copy; 2026 Veteran Gutters & Guards. All Rights Reserved.</p>
-            <p style="margin-top: 10px;">Serving Marion, Sumter, and Lake Counties.</p>
+            <p style="margin-top: 10px;">Serving Marion, Sumter, and Lake Counties. | <a href="sitemap.html"
+                    style="color: #555; text-decoration: none;">Site Map</a></p>
         </div>
     </footer>
 
@@ -751,6 +755,13 @@
         async function handleLeadSubmit(event) {
             event.preventDefault();
             const form = event.target;
+
+            // Honeypot Defense (Round 7) 🛡️
+            if (form.website_honey && form.website_honey.value) {
+                console.warn("Spam Bot Detected 🤖");
+                return; // Silent fail
+            }
+
             const btn = form.querySelector('button[type="submit"]');
             const originalText = btn.innerText;
 
