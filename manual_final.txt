@@ -1,46 +1,3 @@
-import { createClient } from '@supabase/supabase-js';
-
-export async function onRequest(context) {
-    const { request, env } = context;
-
-    if (request.method !== 'POST') {
-        return new Response('Method Not Allowed', { status: 405 });
-    }
-
-    // --- Configuration ---
-    const SUPABASE_URL = env.SUPABASE_URL;
-    const SUPABASE_KEY = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY;
-    // const OPENAI_API_KEY = env.OPENAI_API_KEY; // Deprecated
-
-    if (!SUPABASE_URL || !SUPABASE_KEY) {
-        return new Response(JSON.stringify({ error: 'Server misconfiguration: Missing Supabase' }), { status: 500 });
-    }
-
-    try {
-        const { messages } = await request.json();
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        // --- BRANCH LOGIC ---
-        // If we have Cloudflare AI binding, use it.
-        if (env.AI) {
-            return await handleAIChat(env, messages, supabase);
-        } else {
-            console.log("No AI Binding found. Using Rule-Based logic.");
-            return await handleRuleBasedChat(env, messages, supabase);
-        }
-
-    } catch (error) {
-        console.error("Server Error:", error);
-        return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-    }
-}
-
-// ==========================================
-// 🧠 MODE A: INTERNAL BRAIN (Cloudflare Workers AI)
-// ==========================================
-async function handleAIChat(env, messages, supabase) {
-    // 1. The "Internal" Sales Manual
-    const MANUAL_CONTENT = `
 SALES REPRESENTATIVE
 TRAINING MANUAL
 1-800-290-6106 
@@ -866,7 +823,7 @@ A sale that is 59
 .
 99 - 55% of retail pays 2%
 .
-All sales have an admin fee of \$400 tak en off of the sale price
+All sales have an admin fee of $400 tak en off of the sale price
 .
 Any ˜nancing fees are taken off of the sales price before the admin fee
 .
@@ -1173,7 +1130,7 @@ We have been in business since 2005
  
 Ł
  
-Over the year s we have grown into a \$2 billion company
+Over the year s we have grown into a $2 billion company
 .
  
 Ł
@@ -1464,7 +1421,7 @@ LeafFilter s micromesh screen
 .
 
 27
-HOME DEPOT DIY SCREENS.   \$3-\$4/FOOT INSTALLED.
+HOME DEPOT DIY SCREENS.   $3-$4/FOOT INSTALLED.
 "Have you ever seen this?" Explain how that this product is clipped onto the lip of the gutter and 
 tuck ed under shingles
 .
@@ -1498,10 +1455,10 @@ DISADVANTAGES AND AVERAGE PRICE PER FOOT BY GUTTER GUARD TYPE
 DISADVANTAGES AND AVERAGE PRICE PER FOOT BY GUTTER GUARD TYPE
 
 28
-At a house that needs 150 feet of gutter protection, you might say, "It would cost \$60 0 to put these 
+At a house that needs 150 feet of gutter protection, you might say, "It would cost $60 0 to put these 
 Home Depot screens on your house
 .
- Would you pay \$60 0 for something that you know wont work?" 
+ Would you pay $60 0 for something that you know wont work?" 
 The other goal of price conditioning is to get the customer used to hearing prices in the thousands
 .
  
@@ -1526,7 +1483,7 @@ Caves in under any amount of weight
 .
 Ł
  
-Sells for \$6 to \$8 per foot
+Sells for $6 to $8 per foot
 .
 
 29
@@ -1541,7 +1498,7 @@ Caves in under any amount of weight
 .
 Ł
  
-Sells for \$6 to \$8 per foot
+Sells for $6 to $8 per foot
 .
 
 29
@@ -1566,7 +1523,7 @@ Isn t back ed by a lifetime warranty
  
 Ł
  
-Sells for \$20 per foot
+Sells for $20 per foot
 .
 
 30
@@ -1594,7 +1551,7 @@ Creates more maintenance and requires regular replacement
 .
 Ł
  
-Sells for \$10 to \$12 per foot
+Sells for $10 to $12 per foot
 .
 
 uickly over time
@@ -1605,7 +1562,7 @@ Creates more maintenance and requires regular replacement
 .
 Ł
  
-Sells for \$10 to \$12 per foot
+Sells for $10 to $12 per foot
 .
  
 
@@ -1627,7 +1584,7 @@ Creates more maintenance and requires regular replacement
 .
 Ł
  
-Sells for \$10 to \$12 per foot
+Sells for $10 to $12 per foot
 .
  
 
@@ -1662,7 +1619,7 @@ Adds no curb appeal
 .
 Ł 
  
-Sells for \$40 to \$60 per foot
+Sells for $40 to $60 per foot
 .
 
 unclog
@@ -1677,7 +1634,7 @@ Adds no curb appeal
 .
 Ł 
  
-Sells for \$40 to \$60 per foot
+Sells for $40 to $60 per foot
 .
 
 33
@@ -1712,7 +1669,7 @@ or insert)
 .
 Ł 
  
-Sells for \$60 to \$10 0 per foot
+Sells for $60 to $10 0 per foot
 .
 
 lacement (the product is one solid piece rather than a topper 
@@ -1722,7 +1679,7 @@ or insert)
 .
 Ł 
  
-Sells for \$60 to \$10 0 per foot
+Sells for $60 to $10 0 per foot
 .
  
 
@@ -2012,7 +1969,7 @@ whole thing comes to only thirty ˜ve hundred
 credit card, or would you take advantage of our ˜nancing?"And quote a payment of 
 2
 .
-15% of the price or \$35, whichever is greater
+15% of the price or $35, whichever is greater
 .
  
 3
@@ -2033,7 +1990,7 @@ something you could comfortably write a check for?"
 If the answer is ˜nancing then we need to ensure that the payment amount is indeed 
 affordable
 .
-"So, if it were \$76 a month that would be comfortable for you?"
+"So, if it were $76 a month that would be comfortable for you?"
  
 5
 .  
@@ -2058,16 +2015,16 @@ our offer of ˜nancing if the objection is paying interest
  
 1
 .  
-Hoping - What were you hoping a project lik e this costs?  "\$2,0 0 0"
+Hoping - What were you hoping a project lik e this costs?  "$2,0 0 0"
 .
   How did you come up 
 with that?
  
 2
 .  
-Expecting - After seeing Bottom Line Secrets saying expect to spend \$3,50 0-\$60 0 0, and the 
+Expecting - After seeing Bottom Line Secrets saying expect to spend $3,50 0-$60 0 0, and the 
 product and all the tune-up we do to your gutter s, Im sure you were expecting it to be a 
-little more, maybe 20%-25% more, so that takes us to \$2,50 0 (head nod)
+little more, maybe 20%-25% more, so that takes us to $2,50 0 (head nod)
 .
  
 3
@@ -2075,7 +2032,7 @@ little more, maybe 20%-25% more, so that takes us to \$2,50 0 (head nod)
 Most people - Youre not far off at all
 .
   Most people are expecting a project lik e this to come 
-in at around \$3,00 0
+in at around $3,00 0
 .
   So were not far apart
 .
@@ -2323,15 +2280,15 @@ Whatever number they give you subtract it from the retail price of their install
 this number over the next ten year s and divide that number over 365 days in the year
 .
   For example if 
-the retail price is \$3800 and they were hoping it was going to be \$20 0 0 the math would be:
+the retail price is $3800 and they were hoping it was going to be $20 0 0 the math would be:
  
 -
  
-\$380 0 - \$20 0 0 = \$180 0/10 year s = \$180 
+$380 0 - $20 0 0 = $180 0/10 year s = $180 
  
 -
  
-180/365 days = \$
+180/365 days = $
 .
 49/Day
  
@@ -2368,7 +2325,7 @@ closer to purchasing
 .
 THE IMMEDIATE ORDER INCENTIVE
  - Offering a small discount to incenti vize the prospect to move 
-forward (typically \$250 off) and place an immediate order
+forward (typically $250 off) and place an immediate order
 .
  
 Ł
@@ -2432,13 +2389,13 @@ need for immediate orders
 they wanted to do this, to placing an immediate order we can offer you a signi˜cant savings–
 .
 "
-"Remember, the (quote the retail price as a dollar amount–ex: \$5585) is good anytime
+"Remember, the (quote the retail price as a dollar amount–ex: $5585) is good anytime
 .
    But based on 
-our need for immediate orders, I can do the whole thing today, for only \$4497!"
+our need for immediate orders, I can do the whole thing today, for only $4497!"
 NOW YOU NEED TO ASK FOR THE ORDER:
  
-"Based on a savings of \$1088 on something you need to get done, wouldn t you agree that now is 
+"Based on a savings of $1088 on something you need to get done, wouldn t you agree that now is 
 the best time to go ahead and get this started?"
 DISCUSSION BETWEEN DISCOUNTS
  
@@ -2734,13 +2691,13 @@ THE INVOICE DISCOUNT
  - Offering the lowest acceptable price in order to mak e the sale today
 .
  
-This discount should be \$10 0 over our Par Price
+This discount should be $10 0 over our Par Price
 .
   Par = Retail Price - 35% +TheAdmin Fee
 .
 This discount is one last attem
 
-discount should be \$10 0 over our Par Price
+discount should be $10 0 over our Par Price
 .
   Par = Retail Price - 35% +TheAdmin Fee
 .
@@ -3198,7 +3155,7 @@ CUSTOMER RESPONSE:  "TOO MUCH MONEY–"
  
 TRADING MONEY CLOSE
 REP:
-  I understand how you feel, however if you gi ve us, lets say, \$4,0 0 0 and they gi ve you back \$4,50 0 
+  I understand how you feel, however if you gi ve us, lets say, $4,0 0 0 and they gi ve you back $4,50 0 
 or more in added value to your home, it would be a great thing to do, right?
 CUSTOMER RESPONSE:
  "Yes–"
@@ -3284,32 +3241,32 @@ have right now
 ˜r st triangle) and the other home, house B (write the letter "B" in the middle of the second triangle)
 .
  
-Appropriately, what is the value of your home at this time 1, 2, or \$300,00 0?
+Appropriately, what is the value of your home at this time 1, 2, or $300,00 0?
 CUSTOMER RESPONSE:
- "\$20 0,0 0 0–"
+ "$20 0,0 0 0–"
 REP: 
- Great, lets assume then that house B is on the mark et for \$20 0,0 0 0 (write \$20 0,0 0 0 in the middle of 
-the triangle mark ed "B") and house A is selling for \$205,0 0 0, which includes the cost of the needed gutter 
+ Great, lets assume then that house B is on the mark et for $20 0,0 0 0 (write $20 0,0 0 0 in the middle of 
+the triangle mark ed "B") and house A is selling for $205,0 0 0, which includes the cost of the needed gutter 
 protection at the manufacturers suggested retail price
 .
-  (Write \$205,0 0 0 in the middle of the triangle
+  (Write $205,0 0 0 in the middle of the triangle
 
 eeded gutter 
 protection at the manufacturers suggested retail price
 .
-  (Write \$205,0 0 0 in the middle of the triangle 
+  (Write $205,0 0 0 in the middle of the triangle 
 mark ed "A")
 REP:
   Since a home buyer would amortize the cost of the gutter protection over a 30 year mortgage, the 
-difference on the monthly installment from houseA compared to house B is only approximately \$25 a 
+difference on the monthly installment from houseA compared to house B is only approximately $25 a 
 month
 .
-  (Rule of thumb: \$50 mo
+  (Rule of thumb: $50 mo
 .
- per \$10,0 0 0 ˜nanced over 30 year s)
+ per $10,0 0 0 ˜nanced over 30 year s)
 .
   Considering that house A has up-
-dated gutter protection and only costs approximately \$25 a month more to own, which home would you 
+dated gutter protection and only costs approximately $25 a month more to own, which home would you 
 buy if you had to do it all over again?
 CUSTOMER RESPONSE:
  "House A–"
@@ -3558,7 +3515,7 @@ and under stand exactly what were proposing
 contract, and a business card
 .
  
-THE PRICE YOU THEN OFFER THE HOMEOWNER SHOULD BE \$100 OVER PAR***
+THE PRICE YOU THEN OFFER THE HOMEOWNER SHOULD BE $100 OVER PAR***
  
 Then mak e sure you follow up with the homeowner before the time you gave them
 .
@@ -6311,189 +6268,3 @@ to
 You now have a more accurate story measurement
 .
 
-
-    `;
-
-    const SYSTEM_PROMPT = \`
-    You are the Veteran Gutters AI Sales Assistant.
-    Your mission is to qualify leads and book appointments.
-    
-    KNOWLEDGE BASE:
-    \${MANUAL_CONTENT}
-
-    RULES:
-    - Keep responses short (under 3 sentences).
-    - Ask only ONE question at a time.
-    - Your goal is to collect: Name, Phone, Address, and Preferred Time.
-    - Once you have these 4 things, you MUST output a JSON object to save the lead.
-    - If asked for price, say: "Estimates are free, but we need to measure the home for accuracy."
-    
-    FORMAT:
-    Return a JSON object.
-    If the conversation is ongoing, return: {"response": "your message"}
-    If the lead is complete (Name, Phone, Address, Time collected), return: 
-    {
-      "response": "I've secured your info. Jesse will call you shortly.",
-      "lead": {
-        "name": "...",
-        "phone": "...",
-        "address": "...",
-        "notes": "..."
-      }
-    }
-    \`;
-
-    try {
-        // 2. Run Llama-3 (The Internal Brain)
-        const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                ...messages
-            ]
-        });
-
-        // 3. Parse the thoughts
-        let aiText = response.response || "";
-        let jsonMatch = aiText.match(/\\{.*\\}/s); // Find JSON blob (dotall)
-        
-        if (jsonMatch) {
-            try {
-                const data = JSON.parse(jsonMatch[0]);
-                
-                // If the brain says "Save Lead"
-                if (data.lead) {
-                    await supabase.from('leads').insert([{
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        notes: \`AI Lead: \${data.lead.notes} (Addr: \${data.lead.address})\`,
-                        status: 'new'
-                    }]);
-                    
-                    // Notify Owner
-                    await sendEmailNotification(env, {
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        service: "[AI Lead] " + data.lead.notes
-                    });
-                }
-
-                // Return the bot's speech
-                return new Response(JSON.stringify({
-                    role: 'assistant',
-                    content: data.response
-                }), { headers: { 'Content-Type': 'application/json' } });
-
-            } catch (e) {
-                // If JSON parse fails, just talk
-                 return new Response(JSON.stringify({
-                    role: 'assistant',
-                    content: aiText // Return full text if JSON parse fails but it looked like JSON
-                }), { headers: { 'Content-Type': 'application/json' } });
-            }
-        } 
-
-        // Fallback (Just Text - probably didn't valid JSON)
-        return new Response(JSON.stringify({
-            role: 'assistant',
-            content: aiText
-        }), { headers: { 'Content-Type': 'application/json' } });
-
-    } catch (err) {
-        console.error("AI Error:", err);
-        return await handleRuleBasedChat(env, messages, supabase); // Fallback to Script
-    }
-}
-
-// ==========================================
-// 📜 MODE B: RULE-BASED (The Script)
-// ==========================================
-async function handleRuleBasedChat(env, messages, supabase) {
-    const userMessages = messages.filter(m => m.role === 'user');
-
-    // Slots extraction (Index based - strict order)
-    const slots = {
-        name: userMessages[0]?.content,
-        issue: userMessages[1]?.content,
-        urgency: userMessages[2]?.content,
-        phone: userMessages[3]?.content,
-        email: userMessages[4]?.content,
-        address: userMessages[5]?.content
-    };
-
-    let currentState = 'GREETING';
-    if (slots.name) currentState = 'DISCOVER';
-    if (slots.issue) currentState = 'QUALIFY';
-    if (slots.urgency) currentState = 'CAPTURE_CONTACT';
-    if (slots.phone) currentState = 'CAPTURE_EMAIL';
-    if (slots.email) currentState = 'CAPTURE_ADDRESS';
-    if (slots.address) currentState = 'CONFIRM';
-
-    let botResponseText = "";
-    let isComplete = false;
-
-    switch (currentState) {
-        case 'GREETING':
-            botResponseText = "Hello! I'm the Veteran Gutters Assistant.\\n\\nTo get started with a free estimate, what is your **Name**?";
-            break;
-        case 'DISCOVER':
-            botResponseText = \`Nice to meet you, \${slots.name}. What specific issues are you seeing? (e.g., Leaks, Clogs, or New Install?)\`;
-            break;
-        case 'QUALIFY':
-            botResponseText = "Understood. Protecting the foundation is key.\\n\\nWould you say this project is urgent?";
-            break;
-        case 'CAPTURE_CONTACT':
-            botResponseText = "We can help. To have Jesse contact you for a price, what is your **Phone Number**?";
-            break;
-        case 'CAPTURE_EMAIL':
-            botResponseText = "Got it. And what is your **Email Address**?";
-            break;
-        case 'CAPTURE_ADDRESS':
-            botResponseText = "Finally, what is the **Property Address**?";
-            break;
-        case 'CONFIRM':
-            isComplete = true;
-            botResponseText = "Excellent! Jesse will contact you shortly to confirm. We'll be in touch!";
-            break;
-    }
-
-    if (isComplete) {
-        const lead = {
-            name: slots.name,
-            phone: slots.phone,
-            notes: \`Script Lead: \${slots.issue} (Urgency: \${slots.urgency})\`,
-            status: 'new'
-        };
-        await supabase.from('leads').insert([lead]);
-        await sendEmailNotification(env, { name: lead.name, phone: lead.phone, service: "Chatbot Script Lead" });
-    }
-
-    return new Response(JSON.stringify({
-        role: 'assistant',
-        content: botResponseText
-    }), { headers: { 'Content-Type': 'application/json' } });
-}
-
-// --- Helper: Copied from leads.js logic ---
-async function sendEmailNotification(env, lead) {
-    const API_KEY = env.RESEND_API_KEY;
-    if (!API_KEY) return "skipped";
-
-    try {
-        await fetch('https://api.resend.com/emails', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': \`Bearer \${API_KEY}\`
-            },
-            body: JSON.stringify({
-                from: 'Veteran Gutters Leads <leads@veterangutterguards.com>',
-                to: ['Vetgutters@gmail.com'],
-                subject: \`🚀 New Lead: \${lead.name}\`,
-                html: \`<p>Name: \${lead.name}</p><p>Phone: \${lead.phone}</p><p>Info: \${lead.service}</p>\`
-            })
-        });
-        return "sent";
-    } catch (e) {
-        return "failed";
-    }
-}
