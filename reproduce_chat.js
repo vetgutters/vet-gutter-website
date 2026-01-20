@@ -1,38 +1,36 @@
 const https = require('https');
 
-async function testPing() {
+async function testChat() {
     const options = {
         hostname: 'veterangutterguards.com',
-        path: '/api/ping',
-        method: 'GET',
+        path: '/api/chat',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         }
     };
 
-    console.log(`Sending request to https://${options.hostname}${options.path}...`);
+    const payload = JSON.stringify({
+        messages: [{ role: "user", content: "Hello" }]
+    });
+
+    console.log(`POST to https://${options.hostname}${options.path}...`);
 
     const req = https.request(options, (res) => {
-        console.log(`Status Code: ${res.statusCode}`);
-        console.log(`Status Message: ${res.statusMessage}`);
-
+        console.log(`Status: ${res.statusCode}`);
         let data = '';
-
-        res.on('data', (chunk) => {
-            data += chunk;
-        });
-
+        res.on('data', (chunk) => { data += chunk; });
         res.on('end', () => {
-            console.log(`Raw Response Body:`);
-            console.log(data);
+            console.log("Body:", data);
         });
     });
 
     req.on('error', (e) => {
-        console.error(`Problem with request: ${e.message}`);
+        console.error(`Error: ${e.message}`);
     });
 
+    req.write(payload);
     req.end();
 }
 
-testPing();
+testChat();
