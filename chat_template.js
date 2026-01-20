@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
 
 export async function onRequest(context) {
     const { request, env } = context;
@@ -16,7 +16,8 @@ export async function onRequest(context) {
 
     try {
         const { messages } = await request.json();
-        const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        // const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const supabase = { from: () => ({ insert: () => Promise.resolve() }) }; // MOCK
 
         // DEBUG: Ping Pong
         if (messages.length > 0 && messages[messages.length - 1].content === "PING") {

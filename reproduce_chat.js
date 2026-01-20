@@ -12,7 +12,7 @@ async function testChat() {
 
     const payload = JSON.stringify({
         messages: [
-            { role: "user", content: "Hi, I need a quote for gutters." }
+            { role: "user", content: "PING" }
         ]
     });
 
