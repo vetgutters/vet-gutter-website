@@ -2,5 +2,5 @@ name = "veteran-gutters-chat"
 compatibility_date = "2024-01-01"
 pages_build_output_dir = "."
 
-# [ai]
-# binding = "AI"
+[ai]
+binding = "AI"
