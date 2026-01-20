@@ -3,19 +3,23 @@
 
 <head>
     <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KMQZTQWC');</script>
-<!-- End Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KMQZTQWC');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Our Work | Veteran Gutters & Guards</title>
 
     <!-- Open Graph (Social Sharing) -->
     <meta property="og:title" content="Our Work | Veteran Gutters & Guards Photo Gallery">
-    <meta property="og:description" content="See our completed gutter installation and repair projects in Ocala, The Villages, and Central Florida. Real photos from real customers.">
+    <meta property="og:description"
+        content="See our completed gutter installation and repair projects in Ocala, The Villages, and Central Florida. Real photos from real customers.">
     <meta property="og:image" content="https://veterangutterguards.com/assets/photos/hero-new.jpg">
     <meta property="og:url" content="https://veterangutterguards.com/gallery.html">
     <meta property="og:type" content="website">
@@ -23,7 +27,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Our Work | Veteran Gutters & Guards Photo Gallery">
-    <meta name="twitter:description" content="See our completed gutter installation and repair projects in Ocala, The Villages, and Central Florida. Real photos from real customers.">
+    <meta name="twitter:description"
+        content="See our completed gutter installation and repair projects in Ocala, The Villages, and Central Florida. Real photos from real customers.">
     <meta name="twitter:image" content="https://veterangutterguards.com/assets/photos/hero-new.jpg">
 
     <!-- Canonical URL -->
@@ -134,9 +139,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <body>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMQZTQWC"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMQZTQWC" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <header class="sticky-nav">
         <div class="container nav-container">
             <a href="index.html" class="brand">
@@ -174,46 +179,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    <section class="section">
-        <div class="container">
-            <h2 style="text-align: center; margin-bottom: 40px; color: var(--gold);">Recent Project Gallery</h2>
-            <p style="text-align: center; margin-bottom: 40px; color: var(--text-muted);">Explore our recent
-                installations and repairs across Ocala, The Villages, and surrounding areas.</p>
 
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- Dynamic Projects Load Here -->
-            </div>
+    <script>
+        // Load Projects on Page Load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.getElementById('galleryGrid');
 
-            <!-- Default Static Projects (Hidden if JS fails or loading) -->
-            <div id="staticGallery" style="display:none;">
-                <!-- Keeping original static items as backup if needed, or simply removing them to rely on dynamic content + hardcoded initial set in JS -->
-            </div>
+            // 1. Hardcoded "Core" Portfolio (The original best shots)
+            const staticProjects = [
+                { src: 'assets/photos/real-project-1.jpg', title: 'Seamless Install' },
+                { src: 'assets/photos/real-project-2.jpg', title: 'Leaf Guard Protection' },
+                { src: 'assets/photos/real-project-3.jpg', title: 'Custom Miter Box' },
+                { src: 'assets/photos/real-project-4.jpg', title: 'Ocala Estate Home' },
+                { src: 'assets/photos/real-project-5.jpg', title: 'Copper Specialty' },
+                { src: 'assets/photos/real-project-6.jpg', title: '6-Inch Commercial' }
+            ];
 
-            <script>
-                // Load Projects on Page Load
-                document.addEventListener('DOMContentLoaded', async () => {
-                    const grid = document.getElementById('galleryGrid');
+            let html = '';
 
-                    // 1. Hardcoded "Core" Portfolio (The original best shots)
-                    const staticProjects = [
-                        { src: 'assets/photos/real-project-1.jpg', title: 'Seamless Install' },
-                        { src: 'assets/photos/real-project-2.jpg', title: 'Leaf Guard Protection' },
-                        { src: 'assets/photos/real-project-3.jpg', title: 'Custom Miter Box' },
-                        { src: 'assets/photos/real-project-4.jpg', title: 'Ocala Estate Home' },
-                        { src: 'assets/photos/real-project-5.jpg', title: 'Copper Specialty' },
-                        { src: 'assets/photos/real-project-6.jpg', title: '6-Inch Commercial' }
-                    ];
+            // Add API Projects First (Newest)
+            try {
+                const res = await fetch('/api/leads?type=projects');
+                if (res.ok) {
+                    const projects = await res.json();
+                    // Clear Loader
+                    const loader = document.getElementById('galleryLoader');
+                    if (loader) loader.style.display = 'none';
 
-                    let html = '';
-
-                    // Add API Projects First (Newest)
-                    try {
-                        const res = await fetch('/api/leads?type=projects');
-                        if (res.ok) {
-                            const projects = await res.json();
-                            if (Array.isArray(projects)) {
-                                projects.forEach(p => {
-                                    html += `
+                    if (Array.isArray(projects)) {
+                        projects.forEach(p => {
+                            html += `
                                     <div class="gallery-item" onclick="openLightbox(this)">
                                         <img src="${p.image_url}" alt="${p.title}" loading="lazy" onerror="this.src='assets/logo-shield.png'">
                                         <div class="caption">
@@ -221,26 +216,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                             <span style="font-size:0.8rem; opacity:0.8;">${p.description || 'Recent Work'}</span>
                                         </div>
                                     </div>`;
-                                });
-                            }
-                        }
-                    } catch (e) {
-                        console.error("Gallery Fetch Error:", e);
+                        });
                     }
+                }
+            } catch (e) {
+                console.error("Gallery Fetch Error:", e);
+            }
 
-                    // Add Static Projects (After)
-                    staticProjects.forEach(p => {
-                        html += `
+            // Add Static Projects (After)
+            staticProjects.forEach(p => {
+                html += `
                         <div class="gallery-item" onclick="openLightbox(this)">
                             <img src="${p.src}" alt="${p.title}" loading="lazy">
                             <div class="caption">${p.title}</div>
                         </div>`;
-                    });
+            });
 
-                    grid.innerHTML = html;
-                });
-            </script>
-        </div>
+            grid.innerHTML = html;
+        });
+    </script>
+    </div>
     </section>
 
     <section class="final-cta-section">
@@ -251,11 +246,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </section>
 
-    
+
     <!-- MONSTER SEO FOOTER -->
     <footer style="background: #0a0a0a; color: #fff; padding: 60px 0 30px; border-top: 1px solid #333;">
-        <div class="container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
-            
+        <div class="container"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px;">
+
             <!-- Column 1: Brand -->
             <div>
                 <img src="assets/logo-shield.png" alt="Veteran Gutters" style="height: 50px; margin-bottom: 20px;">
@@ -263,7 +259,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     Veteran-owned and operated. We bring military precision to gutter installation and repair.
                 </p>
                 <div style="margin-top: 20px;">
-                    <a href="tel:3212787996" style="color: #fff; font-weight: 600; font-size: 1.1rem; text-decoration: none;">(321) 278-7996</a>
+                    <a href="tel:3212787996"
+                        style="color: #fff; font-weight: 600; font-size: 1.1rem; text-decoration: none;">(321)
+                        278-7996</a>
                     <p style="color: #888; font-size: 0.8rem; margin-top: 5px;">Licensed & Insured</p>
                 </div>
             </div>
@@ -272,47 +270,64 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div>
                 <h4 style="color: var(--gold); margin-bottom: 20px;">Our Services</h4>
                 <ul style="list-style: none; padding: 0; line-height: 2;">
-                    <li><a href="services/seamless-gutters.html" style="color: #ccc; text-decoration: none; transition: color 0.2s;">Seamless Gutters</a></li>
-                    <li><a href="services/gutter-guards.html" style="color: #ccc; text-decoration: none; transition: color 0.2s;">Micro-Mesh Guards</a></li>
-                    <li><a href="services/repairs.html" style="color: #ccc; text-decoration: none; transition: color 0.2s;">Gutter Repairs</a></li>
-                    <li><a href="services/fascia-soffit.html" style="color: #ccc; text-decoration: none; transition: color 0.2s;">Fascia & Soffit</a></li>
-                    <li><a href="services/cleaning.html" style="color: #ccc; text-decoration: none; transition: color 0.2s;">Gutter Cleaning</a></li>
+                    <li><a href="services/seamless-gutters.html"
+                            style="color: #ccc; text-decoration: none; transition: color 0.2s;">Seamless Gutters</a>
+                    </li>
+                    <li><a href="services/gutter-guards.html"
+                            style="color: #ccc; text-decoration: none; transition: color 0.2s;">Micro-Mesh Guards</a>
+                    </li>
+                    <li><a href="services/repairs.html"
+                            style="color: #ccc; text-decoration: none; transition: color 0.2s;">Gutter Repairs</a></li>
+                    <li><a href="services/fascia-soffit.html"
+                            style="color: #ccc; text-decoration: none; transition: color 0.2s;">Fascia & Soffit</a></li>
+                    <li><a href="services/cleaning.html"
+                            style="color: #ccc; text-decoration: none; transition: color 0.2s;">Gutter Cleaning</a></li>
                 </ul>
             </div>
 
             <!-- Column 3: Service Areas -->
-             <div>
+            <div>
                 <h4 style="color: var(--gold); margin-bottom: 20px;">Service Areas</h4>
                 <ul style="list-style: none; padding: 0; line-height: 2;">
                     <li><a href="locations/ocala.html" style="color: #ccc; text-decoration: none;">Ocala</a></li>
-                    <li><a href="locations/the-villages.html" style="color: #ccc; text-decoration: none;">The Villages</a></li>
-                    <li><a href="locations/belleview.html" style="color: #ccc; text-decoration: none;">Belleview</a></li>
-                    <li><a href="locations/lady-lake.html" style="color: #ccc; text-decoration: none;">Lady Lake</a></li>
-                    <li><a href="locations/dunnellon.html" style="color: #ccc; text-decoration: none;">Dunnellon</a></li>
+                    <li><a href="locations/the-villages.html" style="color: #ccc; text-decoration: none;">The
+                            Villages</a></li>
+                    <li><a href="locations/belleview.html" style="color: #ccc; text-decoration: none;">Belleview</a>
+                    </li>
+                    <li><a href="locations/lady-lake.html" style="color: #ccc; text-decoration: none;">Lady Lake</a>
+                    </li>
+                    <li><a href="locations/dunnellon.html" style="color: #ccc; text-decoration: none;">Dunnellon</a>
+                    </li>
                     <li><a href="locations/wildwood.html" style="color: #ccc; text-decoration: none;">Wildwood</a></li>
                     <li><a href="locations/leesburg.html" style="color: #ccc; text-decoration: none;">Leesburg</a></li>
                 </ul>
             </div>
 
-             <!-- Column 4: Neighborhoods -->
-             <div>
+            <!-- Column 4: Neighborhoods -->
+            <div>
                 <h4 style="color: var(--gold); margin-bottom: 20px;">Neighborhoods</h4>
                 <ul style="list-style: none; padding: 0; line-height: 2; font-size: 0.9rem;">
-                    <li><a href="locations/on-top-of-the-world.html" style="color: #888; text-decoration: none;">On Top of the World</a></li>
-                    <li><a href="locations/stone-creek.html" style="color: #888; text-decoration: none;">Stone Creek</a></li>
-                    <li><a href="locations/village-of-fenney.html" style="color: #888; text-decoration: none;">Village of Fenney</a></li>
-                    <li><a href="locations/marion-oaks.html" style="color: #888; text-decoration: none;">Marion Oaks</a></li>
-                    <li><a href="locations/silver-springs-shores.html" style="color: #888; text-decoration: none;">Silver Springs Shores</a></li>
+                    <li><a href="locations/on-top-of-the-world.html" style="color: #888; text-decoration: none;">On Top
+                            of the World</a></li>
+                    <li><a href="locations/stone-creek.html" style="color: #888; text-decoration: none;">Stone Creek</a>
+                    </li>
+                    <li><a href="locations/village-of-fenney.html" style="color: #888; text-decoration: none;">Village
+                            of Fenney</a></li>
+                    <li><a href="locations/marion-oaks.html" style="color: #888; text-decoration: none;">Marion Oaks</a>
+                    </li>
+                    <li><a href="locations/silver-springs-shores.html"
+                            style="color: #888; text-decoration: none;">Silver Springs Shores</a></li>
                 </ul>
             </div>
         </div>
 
-        <div class="container" style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem;">
+        <div class="container"
+            style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem;">
             <p>&copy; 2026 Veteran Gutters & Guards. All Rights Reserved.</p>
             <p style="margin-top: 10px;">Serving Marion, Sumter, and Lake Counties.</p>
         </div>
     </footer>
-    
+
 
     <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
