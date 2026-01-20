@@ -13,7 +13,8 @@ try {
     const safeManualJSON = JSON.stringify(manualContent);
 
     // Replace the placeholder with the quoted JSON string
-    const finalContent = template.replace('{{MANUAL_CONTENT_JSON}}', safeManualJSON);
+    // Replace the placeholder (Note: match exact spacing from template)
+    const finalContent = template.replace('{{ MANUAL_CONTENT_JSON }}', safeManualJSON);
 
     fs.writeFileSync(outputPath, finalContent);
     console.log('Successfully generated chat.js with JSON.stringify injection.');
