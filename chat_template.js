@@ -10,7 +10,6 @@ export async function onRequest(context) {
     // --- Configuration ---
     const SUPABASE_URL = env.SUPABASE_URL;
     const SUPABASE_KEY = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY;
-    // const OPENAI_API_KEY = env.OPENAI_API_KEY; // Deprecated
 
     if (!SUPABASE_URL || !SUPABASE_KEY) {
         return new Response(JSON.stringify({ error: 'Server misconfiguration: Missing Supabase' }), { status: 500 });
@@ -44,12 +43,12 @@ async function handleAIChat(env, messages, supabase) {
 {{MANUAL_CONTENT}}
     `;
 
-    const SYSTEM_PROMPT = \`
+    const SYSTEM_PROMPT = `
     You are the Veteran Gutters AI Sales Assistant.
     Your mission is to qualify leads and book appointments.
     
     KNOWLEDGE BASE:
-    \${MANUAL_CONTENT}
+    ${MANUAL_CONTENT}
 
     RULES:
     - Keep responses short (under 3 sentences).
@@ -71,7 +70,7 @@ async function handleAIChat(env, messages, supabase) {
         "notes": "..."
       }
     }
-    \`;
+    `;
 
     try {
         // 2. Run Llama-3 (The Internal Brain)
@@ -84,21 +83,21 @@ async function handleAIChat(env, messages, supabase) {
 
         // 3. Parse the thoughts
         let aiText = response.response || "";
-        let jsonMatch = aiText.match(/\\{.*\\}/s); // Find JSON blob (dotall)
-        
+        let jsonMatch = aiText.match(/\{[\s\S]*\}/); // Find JSON blob
+
         if (jsonMatch) {
             try {
                 const data = JSON.parse(jsonMatch[0]);
-                
+
                 // If the brain says "Save Lead"
                 if (data.lead) {
                     await supabase.from('leads').insert([{
                         name: data.lead.name,
                         phone: data.lead.phone,
-                        notes: \`AI Lead: \${data.lead.notes} (Addr: \${data.lead.address})\`,
+                        notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
                         status: 'new'
                     }]);
-                    
+
                     // Notify Owner
                     await sendEmailNotification(env, {
                         name: data.lead.name,
@@ -115,12 +114,12 @@ async function handleAIChat(env, messages, supabase) {
 
             } catch (e) {
                 // If JSON parse fails, just talk
-                 return new Response(JSON.stringify({
+                return new Response(JSON.stringify({
                     role: 'assistant',
-                    content: aiText // Return full text if JSON parse fails but it looked like JSON
+                    content: aiText
                 }), { headers: { 'Content-Type': 'application/json' } });
             }
-        } 
+        }
 
         // Fallback (Just Text - probably didn't valid JSON)
         return new Response(JSON.stringify({
@@ -166,7 +165,7 @@ async function handleRuleBasedChat(env, messages, supabase) {
             botResponseText = "Hello! I'm the Veteran Gutters Assistant.\\n\\nTo get started with a free estimate, what is your **Name**?";
             break;
         case 'DISCOVER':
-            botResponseText = \`Nice to meet you, \${slots.name}. What specific issues are you seeing? (e.g., Leaks, Clogs, or New Install?)\`;
+            botResponseText = `Nice to meet you, ${slots.name}. What specific issues are you seeing? (e.g., Leaks, Clogs, or New Install?)`;
             break;
         case 'QUALIFY':
             botResponseText = "Understood. Protecting the foundation is key.\\n\\nWould you say this project is urgent?";
@@ -190,7 +189,7 @@ async function handleRuleBasedChat(env, messages, supabase) {
         const lead = {
             name: slots.name,
             phone: slots.phone,
-            notes: \`Script Lead: \${slots.issue} (Urgency: \${slots.urgency})\`,
+            notes: `Script Lead: ${slots.issue} (Urgency: ${slots.urgency})`,
             status: 'new'
         };
         await supabase.from('leads').insert([lead]);
@@ -213,13 +212,13 @@ async function sendEmailNotification(env, lead) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': \`Bearer \${API_KEY}\`
+                'Authorization': `Bearer ${API_KEY}`
             },
             body: JSON.stringify({
                 from: 'Veteran Gutters Leads <leads@veterangutterguards.com>',
                 to: ['Vetgutters@gmail.com'],
-                subject: \`🚀 New Lead: \${lead.name}\`,
-                html: \`<p>Name: \${lead.name}</p><p>Phone: \${lead.phone}</p><p>Info: \${lead.service}</p>\`
+                subject: `🚀 New Lead: ${lead.name}`,
+                html: `<p>Name: ${lead.name}</p><p>Phone: ${lead.phone}</p><p>Info: ${lead.service}</p>`
             })
         });
         return "sent";

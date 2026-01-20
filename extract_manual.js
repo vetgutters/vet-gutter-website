@@ -22,7 +22,6 @@ try {
 
     fs.writeFileSync(outputFile, fullText);
     console.log('Successfully extracted manual to:', outputFile);
-    console.log('Total characters:', fullText.length);
 
 } catch (err) {
     console.error('Error reading/writing file:', err);
