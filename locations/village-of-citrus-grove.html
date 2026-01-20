@@ -132,7 +132,8 @@
                     </div>
                     <form id="leadForm" onsubmit="handleLeadSubmit(event)">
                         <div class="pf-group">
-                            <input type="text" name="name" class="pf-input" placeholder="Your Name" required>
+                            <label for="lead-name" class="sr-only">Your Name</label>
+                            <input type="text" id="lead-name" name="name" class="pf-input" placeholder="Your Name" required autocomplete="name">
                         </div>
                         <div class="pf-group">
                             <input type="tel" name="phone" class="pf-input" placeholder="Phone Number" required>
