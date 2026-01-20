@@ -93,18 +93,18 @@ async function handleAIChat(env, messages, supabase) {
                 }
                 return new Response(JSON.stringify({
                     role: 'assistant',
-                    content: data.response
+                    response: data.response
                 }), { headers: { 'Content-Type': 'application/json' } });
             } catch (e) {
                 return new Response(JSON.stringify({
                     role: 'assistant',
-                    content: aiText
+                    response: aiText
                 }), { headers: { 'Content-Type': 'application/json' } });
             }
         }
         return new Response(JSON.stringify({
             role: 'assistant',
-            content: aiText
+            response: aiText
         }), { headers: { 'Content-Type': 'application/json' } });
 
     } catch (err) {
