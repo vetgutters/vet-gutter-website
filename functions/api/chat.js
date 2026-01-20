@@ -7,7 +7,6 @@ export async function onRequest(context) {
         return new Response('Method Not Allowed', { status: 405 });
     }
 
-    // --- Configuration ---
     const SUPABASE_URL = env.SUPABASE_URL;
     const SUPABASE_KEY = env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_ANON_KEY;
 
@@ -19,8 +18,6 @@ export async function onRequest(context) {
         const { messages } = await request.json();
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- BRANCH LOGIC ---
-        // If we have Cloudflare AI binding, use it.
         if (env.AI) {
             return await handleAIChat(env, messages, supabase);
         } else {
@@ -34,9 +31,6 @@ export async function onRequest(context) {
     }
 }
 
-// ==========================================
-// 🧠 MODE A: INTERNAL BRAIN (Cloudflare Workers AI)
-// ==========================================
 async function handleAIChat(env, messages, supabase) {
     // 1. The "Internal" Sales Manual (Injected as a safe JSON string)
     const MANUAL_CONTENT = {{ MANUAL_CONTENT_JSON }
@@ -72,7 +66,6 @@ const SYSTEM_PROMPT = `
     `;
 
 try {
-    // 2. Run Llama-3 (The Internal Brain)
     const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
         messages: [
             { role: "system", content: SYSTEM_PROMPT },
@@ -80,15 +73,12 @@ try {
         ]
     });
 
-    // 3. Parse the thoughts
     let aiText = response.response || "";
-    let jsonMatch = aiText.match(/\{[\s\S]*\}/); // Find JSON blob
+    let jsonMatch = aiText.match(/\{[\s\S]*\}/);
 
     if (jsonMatch) {
         try {
             const data = JSON.parse(jsonMatch[0]);
-
-            // If the brain says "Save Lead"
             if (data.lead) {
                 await supabase.from('leads').insert([{
                     name: data.lead.name,
@@ -96,31 +86,23 @@ try {
                     notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
                     status: 'new'
                 }]);
-
-                // Notify Owner
                 await sendEmailNotification(env, {
                     name: data.lead.name,
                     phone: data.lead.phone,
                     service: "[AI Lead] " + data.lead.notes
                 });
             }
-
-            // Return the bot's speech
             return new Response(JSON.stringify({
                 role: 'assistant',
                 content: data.response
             }), { headers: { 'Content-Type': 'application/json' } });
-
         } catch (e) {
-            // If JSON parse fails, just talk
             return new Response(JSON.stringify({
                 role: 'assistant',
                 content: aiText
             }), { headers: { 'Content-Type': 'application/json' } });
         }
     }
-
-    // Fallback (Just Text - probably didn't valid JSON)
     return new Response(JSON.stringify({
         role: 'assistant',
         content: aiText
@@ -128,17 +110,12 @@ try {
 
 } catch (err) {
     console.error("AI Error:", err);
-    return await handleRuleBasedChat(env, messages, supabase); // Fallback to Script
+    return await handleRuleBasedChat(env, messages, supabase);
 }
 }
 
-// ==========================================
-// 📜 MODE B: RULE-BASED (The Script)
-// ==========================================
 async function handleRuleBasedChat(env, messages, supabase) {
     const userMessages = messages.filter(m => m.role === 'user');
-
-    // Slots extraction (Index based - strict order)
     const slots = {
         name: userMessages[0]?.content,
         issue: userMessages[1]?.content,
@@ -204,7 +181,6 @@ async function handleRuleBasedChat(env, messages, supabase) {
 async function sendEmailNotification(env, lead) {
     const API_KEY = env.RESEND_API_KEY;
     if (!API_KEY) return "skipped";
-
     try {
         await fetch('https://api.resend.com/emails', {
             method: 'POST',
