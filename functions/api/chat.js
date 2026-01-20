@@ -33,7 +33,7 @@ export async function onRequest(context) {
 
 async function handleAIChat(env, messages, supabase) {
     // 1. The "Internal" Sales Manual (Injected as a safe JSON string)
-    const MANUAL_CONTENT = {{ MANUAL_CONTENT_JSON }
+    const MANUAL_CONTENT = {{ __INJECT_MANUAL_HERE__ }
 };
 
 const SYSTEM_PROMPT = `

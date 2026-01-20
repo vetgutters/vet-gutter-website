@@ -9,12 +9,11 @@ try {
     const manualContent = fs.readFileSync(manualPath, 'utf8');
     let template = fs.readFileSync(templatePath, 'utf8');
 
-    // Use JSON.stringify to safely escape everything (newlines, quotes, backslashes)
+    // Use JSON.stringify to safely escape everything
     const safeManualJSON = JSON.stringify(manualContent);
 
-    // Replace the placeholder with the quoted JSON string
-    // STRICT MATCH: {{MANUAL_CONTENT_JSON}} without spaces
-    const finalContent = template.replace('{{MANUAL_CONTENT_JSON}}', safeManualJSON);
+    // UNIQUE PLACEHOLDER REPLACEMENT
+    const finalContent = template.replace('{{__INJECT_MANUAL_HERE__}}', safeManualJSON);
 
     fs.writeFileSync(outputPath, finalContent);
     console.log('Successfully generated chat.js with JSON.stringify injection.');
