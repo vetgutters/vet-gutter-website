@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const manualPath = path.join(__dirname, 'manual_final.txt');
+const manualPath = path.join(__dirname, 'manual_lite.txt');
 const templatePath = path.join(__dirname, 'chat_template.js');
 const outputPath = path.join(__dirname, 'functions', 'api', 'chat.js');
 

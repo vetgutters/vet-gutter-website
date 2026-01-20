@@ -1,0 +1,1 @@
+"MANUAL_CONTENT = {{ __INJECT_MANUAL_HERE__ }\r\n};\r\n\r\nconst SYST"
