@@ -1065,21 +1065,22 @@ footer p {
     }
 }
 
-/* Default: Content is visible (Progressive Enhancement) */
+/* Default: Content is ALWAYS visible (Fail-safe approach) */
 .animate-on-scroll {
     opacity: 1;
     transform: translateY(0);
     transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    will-change: opacity, transform;
 }
 
-/* Only hide content IF JavaScript is running and has added this class */
-body.js-enabled .animate-on-scroll {
+/* Animation preparation - only when observer is actually ready */
+.animate-on-scroll.will-animate {
     opacity: 0;
     transform: translateY(30px);
 }
 
-body.js-enabled .animate-on-scroll.is-visible {
+/* Animation triggered - element becomes visible */
+.animate-on-scroll.will-animate.is-visible,
+.animate-on-scroll.is-visible {
     opacity: 1;
     transform: translateY(0);
 }

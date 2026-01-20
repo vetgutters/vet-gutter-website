@@ -127,34 +127,40 @@ function closeLightbox(event) {
   }
 }
 
-// --- Scroll Animation Observer (Progressive Enhancement) ---
-// 1. Immediately signal that JS is active so CSS can hide elements for animation
-document.body.classList.add('js-enabled');
-
+// --- Scroll Animation Observer (Safe Progressive Enhancement) ---
+// Content is visible by default. Animation is purely an enhancement.
 document.addEventListener('DOMContentLoaded', () => {
   const observerOptions = {
     threshold: 0.1,
     rootMargin: "0px 0px -20px 0px"
   };
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, observerOptions);
-
   const animatedElements = document.querySelectorAll('.animate-on-scroll');
-  animatedElements.forEach(el => observer.observe(el));
 
-  // Failsafe: Ensure content becomes visible even if observer hangs
-  setTimeout(() => {
-    document.querySelectorAll('.animate-on-scroll:not(.is-visible)').forEach(el => {
-      el.classList.add('is-visible');
+  // Only apply animation if IntersectionObserver is supported
+  if ('IntersectionObserver' in window && animatedElements.length > 0) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Mark elements for animation and observe them
+    animatedElements.forEach(el => {
+      el.classList.add('will-animate');
+      observer.observe(el);
     });
-  }, 2000);
+
+    // Failsafe: Ensure content becomes visible even if observer hangs
+    setTimeout(() => {
+      document.querySelectorAll('.animate-on-scroll.will-animate:not(.is-visible)').forEach(el => {
+        el.classList.add('is-visible');
+      });
+    }, 1500);
+  }
 });
 
 // Initialize Storm Protocol
