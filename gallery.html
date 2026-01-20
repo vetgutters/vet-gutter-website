@@ -191,11 +191,11 @@
     </div>
 
     <script>
-        // Load Projects on Page Load
         document.addEventListener('DOMContentLoaded', async () => {
             const grid = document.getElementById('galleryGrid');
+            const loader = document.getElementById('galleryLoader');
 
-            // 1. Hardcoded "Core" Portfolio (The original best shots)
+            // 1. Define Static Projects (Core Portfolio)
             const staticProjects = [
                 { src: 'assets/photos/real-project-1.jpg', title: 'Seamless Install' },
                 { src: 'assets/photos/real-project-2.jpg', title: 'Leaf Guard Protection' },
@@ -205,44 +205,55 @@
                 { src: 'assets/photos/real-project-6.jpg', title: '6-Inch Commercial' }
             ];
 
-            let html = '';
+            // 2. Render Static Projects IMMEDIATELY (Fail Safe)
+            // This ensures the page is never blank even if API fails
+            function renderStatic() {
+                let staticHtml = '';
+                staticProjects.forEach(p => {
+                    staticHtml += `
+                        <div class="gallery-item" onclick="openLightbox(this)">
+                            <img src="${p.src}" alt="${p.title}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            <div class="caption">${p.title}</div>
+                        </div>`;
+                });
+                // Append, don't overwrite if we do this logic weirdly
+                grid.innerHTML += staticHtml;
+                if (loader) loader.style.display = 'none';
+            }
 
-            // Add API Projects First (Newest)
+            renderStatic(); // SHOW CONTENT NOW
+
+            // 3. Try fetching new projects (progressive enhancement)
             try {
-                const res = await fetch('/api/leads?type=projects');
+                // Short timeout to prevent hanging
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+
+                const res = await fetch('/api/leads?type=projects', { signal: controller.signal });
+                clearTimeout(timeoutId);
+
                 if (res.ok) {
                     const projects = await res.json();
-                    // Clear Loader
-                    const loader = document.getElementById('galleryLoader');
-                    if (loader) loader.style.display = 'none';
-
-                    if (Array.isArray(projects)) {
+                    if (Array.isArray(projects) && projects.length > 0) {
+                        let dynamicHtml = '';
                         projects.forEach(p => {
-                            html += `
-                                    <div class="gallery-item" onclick="openLightbox(this)">
-                                        <img src="${p.image_url}" alt="${p.title}" loading="lazy" onerror="this.src='assets/logo-shield.png'">
-                                        <div class="caption">
-                                            <strong>${p.title}</strong><br>
-                                            <span style="font-size:0.8rem; opacity:0.8;">${p.description || 'Recent Work'}</span>
-                                        </div>
-                                    </div>`;
+                            dynamicHtml += `
+                                <div class="gallery-item" onclick="openLightbox(this)">
+                                    <img src="${p.image_url}" alt="${p.title}" loading="lazy" onerror="this.src='assets/logo-shield.png'">
+                                    <div class="caption">
+                                        <strong>${p.title}</strong><br>
+                                        <span style="font-size:0.8rem; opacity:0.8;">${p.description || 'Recent Work'}</span>
+                                    </div>
+                                </div>`;
                         });
+                        // Prepend dynamic projects to the top
+                        grid.innerHTML = dynamicHtml + grid.innerHTML;
                     }
                 }
             } catch (e) {
-                console.error("Gallery Fetch Error:", e);
+                console.warn("Gallery API skipped (offline or timeout):", e);
+                // No action needed, static content is already visible
             }
-
-            // Add Static Projects (After)
-            staticProjects.forEach(p => {
-                html += `
-                        <div class="gallery-item" onclick="openLightbox(this)">
-                            <img src="${p.src}" alt="${p.title}" loading="lazy">
-                            <div class="caption">${p.title}</div>
-                        </div>`;
-            });
-
-            grid.innerHTML = html;
         });
     </script>
     </div>
