@@ -18,11 +18,16 @@ export async function onRequest(context) {
         const { messages } = await request.json();
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // DEBUG: Ping Pong
+        if (messages.length > 0 && messages[messages.length - 1].content === "PING") {
+            return new Response(JSON.stringify({ response: "PONG" }), { headers: { 'Content-Type': 'application/json' } });
+        }
+
         if (env.AI) {
-            console.log("[DEBUG] AI Binding found. dispatching to handleAIChat");
+            console.log("AI Binding found. Attempting AI chat.");
             return await handleAIChat(env, messages, supabase);
         } else {
-            console.log("[DEBUG] No AI Binding found. Using Rule-Based logic.");
+            console.log("No AI Binding found. Using Rule-Based logic.");
             return await handleRuleBasedChat(env, messages, supabase);
         }
 
@@ -36,7 +41,7 @@ async function handleAIChat(env, messages, supabase) {
     // 1. The "Internal" Sales Manual (Injected as a safe JSON string)
     const MANUAL_CONTENT = "VETERAN GUTTERS & GUARDS - SALES PROTOCOL & KNOWLEDGE BASE\r\n\r\nMISSION:\r\nTo provide standard-setting gutter solutions while honoring our veteran roots. \r\nGoal: Qualify the lead and book a free on-site estimate.\r\nNEVER give a price over chat. \"We need to measure to be accurate.\"\r\n\r\nPRODUCT KNOWLEDGE:\r\n- 6\" Seamless Gutters (Aluminum).\r\n- Micro-Mesh Gutter Guards (Surgical grade stainless steel, no-clog guarantee).\r\n- Veteran-Owned & Operated.\r\n- Lifecycle: We clean, seal, realign, and reinforce existing gutters before installing guards.\r\n\r\nSALES SCRIPTING:\r\n\r\n1. THE OPENER:\r\n\"Hi! I'm the Veteran Gutters assistant. I can help you with a free estimate or check availability. What can I do for you?\"\r\n\r\n2. QUALIFYING QUESTIONS (Ask one at a time):\r\n- \"Are you looking for new gutters, gutter guards, or repairs?\"\r\n- \"To check our schedule in your area, may I have your zip code?\"\r\n- \"What is your street address?\"\r\n- \"What is your full name?\"\r\n- \"What is the best phone number to reach you?\"\r\n- \"When would be a good time for a tech to stop by for a free 15-minute measure? (Morning/Afternoon?)\"\r\n\r\n3. OBJECTION HANDLING:\r\n\r\nOBJECTION: \"How much does it cost?\"\r\nREBUTTAL: \"It depends entirely on the linear footage and the condition of your fascia. We offer a 100% free, no-obligation estimate. It takes about 15 minutes. Would you like to set that up?\"\r\n\r\nOBJECTION: \"I just want a ballpark price.\"\r\nREBUTTAL: \"I understand. However, every home is different. Pricing varies based on corners, stories, and roof pitch. We'd rather give you an exact price than a wrong guess. When are you available?\"\r\n\r\nOBJECTION: \"Are you expensive?\"\r\nREBUTTAL: \"We are competitive, but we focus on value. We use surgical-grade stainless steel micro-mesh that never clogs. It's a lifetime solution, not a quick fix.\"\r\n\r\nOBJECTION: \"I need to talk to my spouse.\"\r\nREBUTTAL: \"Of course. Does [Day/Time] work for both of you? It helps if you're both there to ask questions.\"\r\n\r\n4. CLOSING THE APPOINTMENT:\r\n\"Great. I have your info. I've sent this to our scheduling team. Jesse (our scheduling manager) will give you a quick call to confirm the exact arrival window. Thank you for choosing Veteran Gutters!\"\r\n";
 
-    const SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = `
     You are the Veteran Gutters AI Sales Assistant.
     Your mission is to qualify leads and book appointments.
     
@@ -47,8 +52,6 @@ async function handleAIChat(env, messages, supabase) {
     - Keep responses short (under 3 sentences).
     - Ask only ONE question at a time.
     - Your goal is to collect: Name, Phone, Address, and Preferred Time.
-    - CRITICAL: You MUST NOT output the lead JSON object until you have collected the Name, Phone Number, Address, AND Preferred Time.
-    - Do not assume you have the phone number if it wasn't provided. Ask for it explicitly.
     - Once you have these 4 things, you MUST output a JSON object to save the lead.
     - If asked for price, say: "Estimates are free, but we need to measure the home for accuracy."
     
@@ -62,64 +65,63 @@ async function handleAIChat(env, messages, supabase) {
         "name": "...",
         "phone": "...",
         "address": "...",
-        "time": "...",
         "notes": "..."
       }
     }
     `;
 
-    try {
-        console.log("[DEBUG] Starting env.AI.run logic...");
-        const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                ...messages
-            ]
-        });
-        console.log("[DEBUG] env.AI.run completed successfully.");
+try {
+    console.log("Starting env.AI.run...");
+    console.log("Model: @cf/meta/llama-3-8b-instruct");
+    console.log(`Prompt Length: ${SYSTEM_PROMPT.length} characters`);
 
-        let aiText = response.response || "";
-        let jsonMatch = aiText.match(/\{[\s\S]*\}/);
+    const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
+        messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...messages
+        ]
+    });
+    console.log("env.AI.run completed.");
 
-        if (jsonMatch) {
-            try {
-                const data = JSON.parse(jsonMatch[0]);
-                if (data.lead && data.lead.phone && data.lead.name) {
-                    await supabase.from('leads').insert([{
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address}) [Time: ${data.lead.time || 'N/A'}]`,
-                        status: 'new'
-                    }]);
-                    await sendEmailNotification(env, {
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        address: data.lead.address,
-                        time: data.lead.time,
-                        service: "[AI Lead] " + data.lead.notes
-                    });
-                }
-                return new Response(JSON.stringify({
-                    role: 'assistant',
-                    response: data.response
-                }), { headers: { 'Content-Type': 'application/json' } });
-            } catch (e) {
-                return new Response(JSON.stringify({
-                    role: 'assistant',
-                    response: aiText
-                }), { headers: { 'Content-Type': 'application/json' } });
+    let aiText = response.response || "";
+    let jsonMatch = aiText.match(/\{[\s\S]*\}/);
+
+    if (jsonMatch) {
+        try {
+            const data = JSON.parse(jsonMatch[0]);
+            if (data.lead) {
+                await supabase.from('leads').insert([{
+                    name: data.lead.name,
+                    phone: data.lead.phone,
+                    notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
+                    status: 'new'
+                }]);
+                await sendEmailNotification(env, {
+                    name: data.lead.name,
+                    phone: data.lead.phone,
+                    service: "[AI Lead] " + data.lead.notes
+                });
             }
+            return new Response(JSON.stringify({
+                role: 'assistant',
+                content: data.response
+            }), { headers: { 'Content-Type': 'application/json' } });
+        } catch (e) {
+            return new Response(JSON.stringify({
+                role: 'assistant',
+                content: aiText
+            }), { headers: { 'Content-Type': 'application/json' } });
         }
-        return new Response(JSON.stringify({
-            role: 'assistant',
-            response: aiText
-        }), { headers: { 'Content-Type': 'application/json' } });
-
-    } catch (err) {
-        console.error("[DEBUG] AI Error encountered:", err);
-        console.log("[DEBUG] Falling back to rule-based chat due to AI error.");
-        return await handleRuleBasedChat(env, messages, supabase);
     }
+    return new Response(JSON.stringify({
+        role: 'assistant',
+        content: aiText
+    }), { headers: { 'Content-Type': 'application/json' } });
+
+} catch (err) {
+    console.error("AI Error:", err);
+    return await handleRuleBasedChat(env, messages, supabase);
+}
 }
 
 async function handleRuleBasedChat(env, messages, supabase) {
@@ -182,7 +184,7 @@ async function handleRuleBasedChat(env, messages, supabase) {
 
     return new Response(JSON.stringify({
         role: 'assistant',
-        response: botResponseText
+        content: botResponseText
     }), { headers: { 'Content-Type': 'application/json' } });
 }
 
@@ -200,11 +202,7 @@ async function sendEmailNotification(env, lead) {
                 from: 'Veteran Gutters Leads <leads@veterangutterguards.com>',
                 to: ['Vetgutters@gmail.com'],
                 subject: `🚀 New Lead: ${lead.name}`,
-                html: `<p>Name: ${lead.name}</p>
-                       <p>Phone: ${lead.phone}</p>
-                       <p>Address: ${lead.address || "Not provided"}</p>
-                       <p><strong>Timeframe: ${lead.time || "Not specified"}</strong></p>
-                       <p>Info: ${lead.service}</p>`
+                html: `<p>Name: ${lead.name}</p><p>Phone: ${lead.phone}</p><p>Info: ${lead.service}</p>`
             })
         });
         return "sent";

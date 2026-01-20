@@ -18,7 +18,13 @@ export async function onRequest(context) {
         const { messages } = await request.json();
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // DEBUG: Ping Pong
+        if (messages.length > 0 && messages[messages.length - 1].content === "PING") {
+            return new Response(JSON.stringify({ response: "PONG" }), { headers: { 'Content-Type': 'application/json' } });
+        }
+
         if (env.AI) {
+            console.log("AI Binding found. Attempting AI chat.");
             return await handleAIChat(env, messages, supabase);
         } else {
             console.log("No AI Binding found. Using Rule-Based logic.");
@@ -66,12 +72,17 @@ const SYSTEM_PROMPT = `
     `;
 
 try {
+    console.log("Starting env.AI.run...");
+    console.log("Model: @cf/meta/llama-3-8b-instruct");
+    console.log(`Prompt Length: ${SYSTEM_PROMPT.length} characters`);
+
     const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
         messages: [
             { role: "system", content: SYSTEM_PROMPT },
             ...messages
         ]
     });
+    console.log("env.AI.run completed.");
 
     let aiText = response.response || "";
     let jsonMatch = aiText.match(/\{[\s\S]*\}/);
