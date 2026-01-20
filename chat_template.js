@@ -50,8 +50,7 @@ try {
     const aiText = response.response || "I'm here to help! What can I assist you with today?";
 
     return new Response(JSON.stringify({
-        role: 'assistant',
-        content: aiText
+        response: aiText
     }), { headers: { 'Content-Type': 'application/json' } });
 
 } catch (err) {
@@ -79,7 +78,6 @@ async function handleRuleBasedChat(messages) {
     }
 
     return new Response(JSON.stringify({
-        role: 'assistant',
-        content: botResponseText
+        response: botResponseText
     }), { headers: { 'Content-Type': 'application/json' } });
 }
