@@ -18,7 +18,7 @@ export async function onRequest(context) {
         const { messages } = await request.json();
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        if (false && env.AI) {
+        if (env.AI) {
             return await handleAIChat(env, messages, supabase);
         } else {
             console.log("No AI Binding found. Using Rule-Based logic.");
@@ -173,7 +173,7 @@ async function handleRuleBasedChat(env, messages, supabase) {
 
     return new Response(JSON.stringify({
         role: 'assistant',
-        content: botResponseText
+        response: botResponseText
     }), { headers: { 'Content-Type': 'application/json' } });
 }
 
