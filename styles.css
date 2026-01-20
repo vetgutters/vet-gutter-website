@@ -1376,3 +1376,103 @@ footer p {
         box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
     }
 }
+
+/* --- ROUND 6: AUTHORITY & ACCESSIBILITY 🏛️ --- */
+
+/* 1. Print Stylesheet (Professional Brochure Look) */
+@media print {
+    body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+
+    header,
+    nav,
+    .storm-banner,
+    .mobile-cta-bar,
+    .reviews-section,
+    footer,
+    .btn,
+    .desktop-cta-btn {
+        display: none !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    p {
+        color: #000 !important;
+        text-shadow: none !important;
+    }
+
+    a {
+        text-decoration: none !important;
+        color: #000 !important;
+    }
+
+    .container {
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Reveal URLs for services */
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    /* Keep Hero but simplify */
+    .hero-section {
+        background: none !important;
+        height: auto !important;
+        padding: 20px 0 !important;
+        border-bottom: 2px solid #000;
+    }
+
+    .hero-title {
+        color: #000 !important;
+        font-size: 24pt !important;
+    }
+
+    /* Add "Printed Estimate" Header */
+    body:before {
+        content: "Veteran Gutters & Guards - Estimate Copy\a Phone: (321) 278-7996 | Web: veterangutterguards.com \a ---------------------------------------------------";
+        white-space: pre;
+        display: block;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 14pt;
+        text-align: center;
+    }
+}
+
+/* 2. Accessibility Enhancements */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--gold);
+    color: #000;
+    padding: 8px;
+    z-index: 9999;
+    transition: top 0.2s;
+    font-weight: 600;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* High Contrast Focus Rings */
+a:focus,
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--gold) !important;
+    outline-offset: 2px;
+}

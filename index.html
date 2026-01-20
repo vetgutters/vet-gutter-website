@@ -19,6 +19,10 @@
         content="Veteran-owned gutter installation and repair services in Ocala, FL. Seamless gutters, guards, fascia, and soffit repairs. Licensed, insured, and warranty-backed.">
     <link rel="canonical" href="https://veterangutterguards.com/" />
     <link rel="icon" type="image/png" href="assets/logo-shield.png">
+    <!-- PWA Manifest & Meta -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#D4AF37">
+    <link rel="apple-touch-icon" href="assets/logo-shield.png">
 
     <!-- Open Graph (Social Sharing) -->
     <meta property="og:title" content="Veteran Gutters & Guards - Ocala's #1 Rated Gutter Experts">
@@ -46,11 +50,11 @@
     <!-- FontAwesome for Icons (using CDN for simplicity/completeness) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Schema Markup -->
+    <!-- Schema Markup (Round 6 Authority Upgrade) -->
     <script type="application/ld+json">
-    {
+    [{
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": "HomeAndConstructionBusiness",
       "name": "Veteran Gutters & Guards",
       "image": "https://veterangutterguards.com/assets/photos/hero-new.jpg",
       "telephone": "321-278-7996",
@@ -66,24 +70,62 @@
         "latitude": 29.1872,
         "longitude": -82.1401
       },
+      "areaServed": [
+          {"@type": "City", "name": "Ocala"},
+          {"@type": "City", "name": "The Villages"},
+          {"@type": "City", "name": "Belleview"},
+          {"@type": "City", "name": "Lady Lake"},
+          {"@type": "City", "name": "Dunnellon"},
+          {"@type": "City", "name": "Leesburg"},
+          {"@type": "AdministrativeArea", "name": "Marion County"},
+          {"@type": "AdministrativeArea", "name": "Sumter County"},
+          {"@type": "AdministrativeArea", "name": "Lake County"}
+      ],
       "priceRange": "$$",
       "description": "Veteran-owned gutter installation, repair, and protection services in Ocala, The Villages, and surrounding areas. Licensed & Insured.",
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         "opens": "08:00",
         "closes": "18:00"
       },
       "sameAs": [
         "https://www.facebook.com/veteranguttersguards"
       ]
-    }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Are you licensed and insured?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, we are a fully verified Veteran-Owned business carrying full liability coverage for your peace of mind."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Do you offer a warranty?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely. We offer a Lifetime Warranty on workmanship. If it leaks, we fix it."
+        }
+      }, {
+        "@type": "Question",
+        "name": "What areas do you serve?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "We serve Ocala, The Villages, Belleview, Lady Lake, Dunnellon, Wildwood, and all of Marion, Sumter, and Lake Counties."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Do you offer free estimates?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, all our estimates are 100% free and come with no obligation."
+        }
+      }]
+    }]
     </script>
 </head>
 <meta property="og:description"
@@ -152,6 +194,9 @@
 </head>
 
 <body>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to Content</a>
+
     <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KMQZTQWC" height="0" width="0"
             style="display:none;visibility:hidden"></iframe></noscript>
@@ -208,7 +253,7 @@
     </div>
 
     <!-- 2) Hero Section -->
-    <section class="hero-section">
+    <section class="hero-section" id="main-content">
         <div class="container hero-container">
             <div class="hero-content">
                 <div class="veteran-verified-badge">

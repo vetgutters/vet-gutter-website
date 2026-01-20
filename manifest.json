@@ -1,0 +1,22 @@
+{
+    "name": "Veteran Gutters & Guards",
+    "short_name": "VeteranGutters",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#1a1a1a",
+    "theme_color": "#D4AF37",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "assets/logo-shield.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/logo-shield.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "description": "Veteran-owned gutter installation and repair services in Ocala, FL."
+}
