@@ -19,9 +19,10 @@ export async function onRequest(context) {
         const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         if (env.AI) {
+            console.log("[DEBUG] AI Binding found. dispatching to handleAIChat");
             return await handleAIChat(env, messages, supabase);
         } else {
-            console.log("No AI Binding found. Using Rule-Based logic.");
+            console.log("[DEBUG] No AI Binding found. Using Rule-Based logic.");
             return await handleRuleBasedChat(env, messages, supabase);
         }
 
@@ -68,12 +69,14 @@ async function handleAIChat(env, messages, supabase) {
     `;
 
     try {
+        console.log("[DEBUG] Starting env.AI.run logic...");
         const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
             messages: [
                 { role: "system", content: SYSTEM_PROMPT },
                 ...messages
             ]
         });
+        console.log("[DEBUG] env.AI.run completed successfully.");
 
         let aiText = response.response || "";
         let jsonMatch = aiText.match(/\{[\s\S]*\}/);
@@ -113,7 +116,8 @@ async function handleAIChat(env, messages, supabase) {
         }), { headers: { 'Content-Type': 'application/json' } });
 
     } catch (err) {
-        console.error("AI Error:", err);
+        console.error("[DEBUG] AI Error encountered:", err);
+        console.log("[DEBUG] Falling back to rule-based chat due to AI error.");
         return await handleRuleBasedChat(env, messages, supabase);
     }
 }

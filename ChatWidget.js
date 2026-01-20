@@ -244,11 +244,16 @@ class ChatWidget {
 
         try {
             // Call Backend API
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout
+
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: this.messages }) // Send full history
+                body: JSON.stringify({ messages: this.messages }), // Send full history
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             const data = await response.json();
 
