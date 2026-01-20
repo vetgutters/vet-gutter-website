@@ -9,18 +9,14 @@ try {
     const manualContent = fs.readFileSync(manualPath, 'utf8');
     let template = fs.readFileSync(templatePath, 'utf8');
 
-    // CRITICAL: Escape backslashes FIRST, then backticks, then dollars.
-    // This prevents "C:\Path" from becoming a distinct escape sequence, 
-    // and prevents a trailing backslash from escaping the closing backtick.
-    const safeManualContent = manualContent
-        .replace(/\\/g, '\\\\')  // Escape backslashes
-        .replace(/`/g, '\\`')    // Escape backticks
-        .replace(/\$/g, '\\$');  // Escape template literal interpolation starts
+    // Use JSON.stringify to safely escape everything (newlines, quotes, backslashes)
+    const safeManualJSON = JSON.stringify(manualContent);
 
-    const finalContent = template.replace('{{MANUAL_CONTENT}}', safeManualContent);
+    // Replace the placeholder with the quoted JSON string
+    const finalContent = template.replace('{{MANUAL_CONTENT_JSON}}', safeManualJSON);
 
     fs.writeFileSync(outputPath, finalContent);
-    console.log('Successfully generated chat.js with robust escaping.');
+    console.log('Successfully generated chat.js with JSON.stringify injection.');
 
 } catch (err) {
     console.error('Error generating chat.js:', err);

@@ -38,12 +38,11 @@ export async function onRequest(context) {
 // 🧠 MODE A: INTERNAL BRAIN (Cloudflare Workers AI)
 // ==========================================
 async function handleAIChat(env, messages, supabase) {
-    // 1. The "Internal" Sales Manual
-    const MANUAL_CONTENT = `
-{{MANUAL_CONTENT}}
-    `;
+    // 1. The "Internal" Sales Manual (Injected as a safe JSON string)
+    const MANUAL_CONTENT = {{ MANUAL_CONTENT_JSON }
+};
 
-    const SYSTEM_PROMPT = `
+const SYSTEM_PROMPT = `
     You are the Veteran Gutters AI Sales Assistant.
     Your mission is to qualify leads and book appointments.
     
@@ -72,65 +71,65 @@ async function handleAIChat(env, messages, supabase) {
     }
     `;
 
-    try {
-        // 2. Run Llama-3 (The Internal Brain)
-        const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
-            messages: [
-                { role: "system", content: SYSTEM_PROMPT },
-                ...messages
-            ]
-        });
+try {
+    // 2. Run Llama-3 (The Internal Brain)
+    const response = await env.AI.run('@cf/meta/llama-3-8b-instruct', {
+        messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            ...messages
+        ]
+    });
 
-        // 3. Parse the thoughts
-        let aiText = response.response || "";
-        let jsonMatch = aiText.match(/\{[\s\S]*\}/); // Find JSON blob
+    // 3. Parse the thoughts
+    let aiText = response.response || "";
+    let jsonMatch = aiText.match(/\{[\s\S]*\}/); // Find JSON blob
 
-        if (jsonMatch) {
-            try {
-                const data = JSON.parse(jsonMatch[0]);
+    if (jsonMatch) {
+        try {
+            const data = JSON.parse(jsonMatch[0]);
 
-                // If the brain says "Save Lead"
-                if (data.lead) {
-                    await supabase.from('leads').insert([{
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
-                        status: 'new'
-                    }]);
+            // If the brain says "Save Lead"
+            if (data.lead) {
+                await supabase.from('leads').insert([{
+                    name: data.lead.name,
+                    phone: data.lead.phone,
+                    notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
+                    status: 'new'
+                }]);
 
-                    // Notify Owner
-                    await sendEmailNotification(env, {
-                        name: data.lead.name,
-                        phone: data.lead.phone,
-                        service: "[AI Lead] " + data.lead.notes
-                    });
-                }
-
-                // Return the bot's speech
-                return new Response(JSON.stringify({
-                    role: 'assistant',
-                    content: data.response
-                }), { headers: { 'Content-Type': 'application/json' } });
-
-            } catch (e) {
-                // If JSON parse fails, just talk
-                return new Response(JSON.stringify({
-                    role: 'assistant',
-                    content: aiText
-                }), { headers: { 'Content-Type': 'application/json' } });
+                // Notify Owner
+                await sendEmailNotification(env, {
+                    name: data.lead.name,
+                    phone: data.lead.phone,
+                    service: "[AI Lead] " + data.lead.notes
+                });
             }
+
+            // Return the bot's speech
+            return new Response(JSON.stringify({
+                role: 'assistant',
+                content: data.response
+            }), { headers: { 'Content-Type': 'application/json' } });
+
+        } catch (e) {
+            // If JSON parse fails, just talk
+            return new Response(JSON.stringify({
+                role: 'assistant',
+                content: aiText
+            }), { headers: { 'Content-Type': 'application/json' } });
         }
-
-        // Fallback (Just Text - probably didn't valid JSON)
-        return new Response(JSON.stringify({
-            role: 'assistant',
-            content: aiText
-        }), { headers: { 'Content-Type': 'application/json' } });
-
-    } catch (err) {
-        console.error("AI Error:", err);
-        return await handleRuleBasedChat(env, messages, supabase); // Fallback to Script
     }
+
+    // Fallback (Just Text - probably didn't valid JSON)
+    return new Response(JSON.stringify({
+        role: 'assistant',
+        content: aiText
+    }), { headers: { 'Content-Type': 'application/json' } });
+
+} catch (err) {
+    console.error("AI Error:", err);
+    return await handleRuleBasedChat(env, messages, supabase); // Fallback to Script
+}
 }
 
 // ==========================================
@@ -202,7 +201,6 @@ async function handleRuleBasedChat(env, messages, supabase) {
     }), { headers: { 'Content-Type': 'application/json' } });
 }
 
-// --- Helper: Copied from leads.js logic ---
 async function sendEmailNotification(env, lead) {
     const API_KEY = env.RESEND_API_KEY;
     if (!API_KEY) return "skipped";
