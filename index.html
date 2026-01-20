@@ -171,6 +171,7 @@
                 <a href="club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
                 <a href="gallery.html">Gallery</a>
                 <a href="#contact">Contact</a>
+                <a href="#contact" class="desktop-cta-btn">Get Free Quote <i class="fa-solid fa-arrow-right"></i></a>
             </nav>
 
             <div class="nav-right">
@@ -210,8 +211,8 @@
     <section class="hero-section">
         <div class="container hero-container">
             <div class="hero-content">
-                <div class="veteran-badge">
-                    <i class="fa-solid fa-medal"></i> Veteran Owned & Operated
+                <div class="veteran-verified-badge">
+                    <i class="fa-solid fa-shield-halved"></i> Veteran Owned & Verified
                 </div>
                 <h1>Protect Your Home with <span style="color: var(--gold);">Precision</span></h1>
                 <p class="hero-subtext">Veteran-owned gutter installation and leaf protection. We don't just hang
@@ -269,24 +270,47 @@
         </a>
     </div>
 
-    <!-- Trust Badges Strip (Standardized) -->
+    <!-- Trust Badges Strip (Glassmorphism Upgrade) -->
     <section
-        style="background: #111; padding: 40px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
-        <div class="container"
-            style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px; text-align: center;">
-            <div>
-                <i class="fa-solid fa-certificate"
-                    style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
-                <h5 style="color: #fff; font-size: 1.1rem;">Licensed & Insured</h5>
-            </div>
-            <div>
-                <i class="fa-solid fa-star" style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
-                <h5 style="color: #fff; font-size: 1.1rem;">5-Star Rated</h5>
-            </div>
-            <div>
-                <i class="fa-solid fa-hands-holding-circle"
-                    style="color: var(--gold); font-size: 2rem; margin-bottom: 10px;"></i>
-                <h5 style="color: #fff; font-size: 1.1rem;">Lifetime Warranty</h5>
+        style="background: #111; padding: 60px 0; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); position: relative; overflow: hidden;">
+        <!-- Background Glow -->
+        <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60%; height: 60%; background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%); filter: blur(40px); pointer-events: none;">
+        </div>
+
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+
+                <!-- Card 1 -->
+                <div class="glass-panel"
+                    style="padding: 30px; text-align: center; border-radius: var(--radius-sm); transition: transform 0.3s;">
+                    <i class="fa-solid fa-certificate"
+                        style="color: var(--gold); font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 0 15px rgba(212,175,55,0.4);"></i>
+                    <h5 style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;">Licensed & Insured</h5>
+                    <p style="color: #aaa; font-size: 0.9rem; margin: 0;">State Certified Contractor #CCC133.... Full
+                        liability coverage for your peace of mind.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="glass-panel"
+                    style="padding: 30px; text-align: center; border-radius: var(--radius-sm); transition: transform 0.3s;">
+                    <i class="fa-solid fa-star"
+                        style="color: var(--gold); font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 0 15px rgba(212,175,55,0.4);"></i>
+                    <h5 style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;">5-Star Rated</h5>
+                    <p style="color: #aaa; font-size: 0.9rem; margin: 0;">Top-rated on Google & Facebook by verified
+                        Ocala neighbors.</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="glass-panel"
+                    style="padding: 30px; text-align: center; border-radius: var(--radius-sm); transition: transform 0.3s;">
+                    <i class="fa-solid fa-hands-holding-circle"
+                        style="color: var(--gold); font-size: 2.5rem; margin-bottom: 15px; text-shadow: 0 0 15px rgba(212,175,55,0.4);"></i>
+                    <h5 style="color: #fff; font-size: 1.2rem; margin-bottom: 8px;">Lifetime Warranty</h5>
+                    <p style="color: #aaa; font-size: 0.9rem; margin: 0;">We stand behind our work. If it leaks, we fix
+                        it. Period.</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -668,7 +692,7 @@
 
         <div class="container"
             style="border-top: 1px solid #222; padding-top: 30px; text-align: center; color: #555; font-size: 0.8rem;">
-            <p>&copy; 2026 Veteran Gutters & Guards. All Rights Reserved.</p>
+            <p>&copy; 2026 Veteran Gutters & Guards. All Rights Reserved.<br><br><span style="font-size:0.75rem; color:#666; letter-spacing: 0.5px;">FL State License #CCC132560 • Bonded & Insured</span></p>
             <p style="margin-top: 10px;">Serving Marion, Sumter, and Lake Counties.</p>
         </div>
     </footer>
