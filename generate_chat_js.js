@@ -12,8 +12,8 @@ try {
     // Use JSON.stringify to safely escape everything
     const safeManualJSON = JSON.stringify(manualContent);
 
-    // UNIQUE PLACEHOLDER REPLACEMENT
-    const finalContent = template.replace('{{__INJECT_MANUAL_HERE__}}', safeManualJSON);
+    // UNIQUE PLACEHOLDER REPLACEMENT (Regex to handle potential formatting spaces)
+    const finalContent = template.replace(/\{\{\s*__INJECT_MANUAL_HERE__\s*\}\}/, safeManualJSON);
 
     fs.writeFileSync(outputPath, finalContent);
     console.log('Successfully generated chat.js with JSON.stringify injection.');
