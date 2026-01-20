@@ -46,7 +46,7 @@ async function handleAIChat(env, messages, supabase) {
     - Keep responses short (under 3 sentences).
     - Ask only ONE question at a time.
     - Your goal is to collect: Name, Phone, Address, and Preferred Time.
-    - CRITICAL: You MUST NOT output the lead JSON object until you have collected the Name, Phone Number, and Address.
+    - CRITICAL: You MUST NOT output the lead JSON object until you have collected the Name, Phone Number, Address, AND Preferred Time.
     - Do not assume you have the phone number if it wasn't provided. Ask for it explicitly.
     - Once you have these 4 things, you MUST output a JSON object to save the lead.
     - If asked for price, say: "Estimates are free, but we need to measure the home for accuracy."
@@ -61,6 +61,7 @@ async function handleAIChat(env, messages, supabase) {
         "name": "...",
         "phone": "...",
         "address": "...",
+        "time": "...",
         "notes": "..."
       }
     }
@@ -84,13 +85,14 @@ async function handleAIChat(env, messages, supabase) {
                     await supabase.from('leads').insert([{
                         name: data.lead.name,
                         phone: data.lead.phone,
-                        notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address})`,
+                        notes: `AI Lead: ${data.lead.notes} (Addr: ${data.lead.address}) [Time: ${data.lead.time || 'N/A'}]`,
                         status: 'new'
                     }]);
                     await sendEmailNotification(env, {
                         name: data.lead.name,
                         phone: data.lead.phone,
                         address: data.lead.address,
+                        time: data.lead.time,
                         service: "[AI Lead] " + data.lead.notes
                     });
                 }
@@ -197,6 +199,7 @@ async function sendEmailNotification(env, lead) {
                 html: `<p>Name: ${lead.name}</p>
                        <p>Phone: ${lead.phone}</p>
                        <p>Address: ${lead.address || "Not provided"}</p>
+                       <p><strong>Timeframe: ${lead.time || "Not specified"}</strong></p>
                        <p>Info: ${lead.service}</p>`
             })
         });
