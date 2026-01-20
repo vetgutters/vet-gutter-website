@@ -1,0 +1,1203 @@
+:root {
+    /* Design Tokens - Locked */
+    --bg-charcoal: #1a1a1a;
+    --bg-black: #0f0f0f;
+    --bg-card: #141414;
+    /* Darker card background from image */
+    --text-main: #f0f0f0;
+    --text-muted: #b0b0b0;
+
+    /* Gold Accent - Metallic Gradient */
+    --gold: #D4AF37;
+    --gold-light: #F2D06B;
+    --gold-dark: #aa8c2c;
+    --gold-gradient: linear-gradient(180deg, #E5C568 0%, #D4AF37 40%, #AA8C2C 100%);
+    --gold-text-gradient: linear-gradient(180deg, #F2D06B 0%, #D4AF37 100%);
+
+    --border-gold: #aa8c2c;
+    --border-light: rgba(255, 255, 255, 0.1);
+
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+
+    --radius-lg: 12px;
+    --radius-sm: 8px;
+
+    --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.6);
+    --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-glow: 0 0 20px rgba(212, 175, 55, 0.15);
+
+    /* CSS-based Gunmetal Micro Mesh - True Diagonal Lines */
+    --texture-overlay:
+        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.1) 0%, transparent 60%),
+        repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 4px),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 1px, transparent 1px, transparent 4px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #1a1a1a;
+    background-image: var(--texture-overlay);
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-position: center top, center center, center center;
+    /* Sheen covers viewport, Mesh repeats via gradient definition (auto) */
+    background-size: 100% 100vh, auto, auto;
+    background-blend-mode: normal;
+    color: var(--text-main);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Utilities */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: var(--font-heading);
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Section Header Style (Line - Text - Line) */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.section-header::before,
+.section-header::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0 20px;
+    opacity: 0.8;
+}
+
+.section-header h2 {
+    font-size: 2.2rem;
+    color: #fff;
+    /* White per image */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.btn-primary {
+    background: var(--gold-gradient);
+    background-color: var(--gold);
+    /* Fallback */
+    color: #0f0f0f;
+    border: 1px solid var(--gold-light);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-shadow: none;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.6), 0 0 40px rgba(212, 175, 55, 0.3);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-outline:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+}
+
+.btn-large {
+    padding: 16px 40px;
+    font-size: 1.1rem;
+}
+
+/* 1) Sticky Top Bar */
+.sticky-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #0f0f0f;
+    /* Pure black per screenshot */
+    border-bottom: 1px solid var(--border-gold);
+    padding: 10px 0;
+    /* Tighter vertical padding */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 20px;
+    /* spacing between major chunks */
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    /* Prevent logo shrinking */
+}
+
+.brand-logo {
+    height: 60px;
+    /* Big logo per screenshot */
+    width: auto;
+    object-fit: contain;
+}
+
+.brand-text {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    /* Large serif text */
+    font-weight: 700;
+    color: var(--gold);
+    /* Solid gold per screenshot */
+    background: none;
+    /* remove gradient for crisp solid look */
+    -webkit-text-fill-color: var(--gold);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.desktop-nav {
+    display: none;
+}
+
+.desktop-nav a {
+    margin: 0 15px;
+    color: #b0b0b0;
+    /* Light grey per screenshot */
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+    padding-bottom: 5px;
+    /* Space for the underline */
+}
+
+.desktop-nav a:hover,
+.desktop-nav a.active {
+    color: #fff;
+}
+
+/* Restore Gold Laser Animation */
+.desktop-nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+}
+
+.desktop-nav a:hover::after {
+    width: 100%;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-shrink: 0;
+    /* Prevent button shrinking */
+}
+
+/* Specific styling for the phone button to match screenshot */
+.btn-outline {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    /* Slightly rounded */
+    padding: 10px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.btn-outline:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background-color: var(--gold);
+    transition: 0.3s;
+}
+
+.mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--bg-black);
+    border-bottom: 1px solid var(--gold);
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s ease;
+}
+
+.mobile-menu.open {
+    max-height: 350px;
+}
+
+.mobile-menu a {
+    display: block;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-muted);
+}
+
+/* 2) Hero Section */
+.hero-section {
+    padding: 60px 0 0 0;
+    background: radial-gradient(circle at top right, #2a2a2a 0%, var(--bg-black) 70%);
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-gold);
+}
+
+.hero-container {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-bottom: 60px;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero-label {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.hero-subtext {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.hero-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 4px solid #fff;
+    /* White border per image */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.hero-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.trust-strip {
+    background-color: #0d0d0d;
+    border-top: 1px solid var(--border-gold);
+    border-bottom: 1px solid var(--border-gold);
+    padding: 12px 0;
+    text-align: center;
+}
+
+.trust-strip p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.trust-strip span {
+    color: var(--gold);
+    margin: 0 5px;
+}
+
+/* 3) Our Services */
+.services-section {
+    padding: 60px 0;
+    background-image: var(--texture-overlay);
+}
+
+.services-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* General Card Style */
+.service-card-base {
+    background: linear-gradient(145deg, #1a1a1a, #141414);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.service-card-base:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-soft), var(--shadow-glow);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+/* Left Feature Card */
+.service-feature-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(145deg, #1a1a1a, #141414);
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+}
+
+.service-feature-card:hover {
+    box-shadow: var(--shadow-soft), var(--shadow-glow);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.feature-img-wrapper {
+    height: 250px;
+}
+
+.feature-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feature-content {
+    padding: 25px;
+}
+
+.feature-content h3 {
+    font-size: 1.6rem;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.feature-content p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.check-list li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 8px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.check-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: bold;
+}
+
+/* Right Grid */
+.services-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.service-card {
+    background: linear-gradient(145deg, #1a1a1a, #141414);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-card);
+}
+
+.service-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.2);
+}
+
+.card-img-wrapper {
+    height: 150px;
+    position: relative;
+}
+
+.card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 24px;
+    background: transparent;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.card-icon {
+    color: var(--gold);
+    font-size: 1.2rem;
+}
+
+.card-content h4 {
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+.card-content p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* 4) Process Section */
+.process-section {
+    padding-top: 40px;
+    padding-bottom: 80px;
+    border-top: 1px solid var(--border-light);
+}
+
+.process-banner {
+    position: relative;
+    height: 250px;
+    margin-bottom: 50px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+    /* Text at bottom like image */
+    padding-bottom: 30px;
+}
+
+.banner-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.banner-title {
+    font-size: 2.2rem;
+    color: var(--gold);
+    /* Gold color per image */
+    font-family: var(--font-heading);
+    margin-right: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.banner-subtitle {
+    color: #fff;
+    font-size: 1rem;
+    padding-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.steps-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.step-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.step-number {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--gold);
+    line-height: 1;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.step-content h4 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.step-content p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* 5) Final CTA */
+.final-cta-section {
+    background-color: #111;
+    padding: 80px 0;
+    border-top: 1px solid var(--gold-dark);
+    text-align: center;
+    background: radial-gradient(circle at center, #222 0%, #0f0f0f 100%);
+}
+
+.cta-container h2 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+/* 6) Footer */
+footer {
+    background-color: #080808;
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid var(--border-light);
+}
+
+footer p {
+    color: #555;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+    .hero-container {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .hero-content,
+    .hero-image-wrapper {
+        flex: 1;
+    }
+
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .steps-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Process Banner Layout for Desktop */
+    .banner-content {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .banner-title {
+        margin-bottom: 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .desktop-nav {
+        display: block;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .services-container {
+        flex-direction: row;
+        gap: 30px;
+    }
+
+    .service-feature-card {
+        flex: 0 0 45%;
+    }
+
+    .services-grid {
+        flex: 1;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .section-header::before,
+    .section-header::after {
+        max-width: 300px;
+    }
+}
+
+/* Mobile specific fixes (Max-width 480px) */
+/* Mobile specific fixes (Max-width 480px) */
+@media (max-width: 480px) {
+
+    /* Prevent horizontal scroll - FIXED */
+    html,
+    body {
+        overflow-x: hidden;
+        width: 100%;
+        background-color: #1a1a1a;
+        position: relative;
+    }
+
+    /* Force full-width sections to stretch to the new body width */
+    .hero-section,
+    .trust-strip,
+    .section,
+    footer {
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    /* Reduce container padding to give more internal space */
+    .container {
+        padding: 0 12px;
+    }
+
+    .nav-container {
+        gap: 5px;
+    }
+
+    /* Create space in header by hiding text, keeping only logo icon */
+    .brand-text {
+        display: none !important;
+    }
+
+    .brand-logo {
+        height: 40px;
+        /* Small enough to allow phone button to fit */
+    }
+
+    /* Prevent call button clipping/wrapping */
+    .nav-right {
+        margin-right: 0;
+        gap: 8px;
+    }
+
+    .btn-outline {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        /* Force single line */
+        height: 36px;
+    }
+
+    /* Adjust Warranty/Trust bar to not jam the header */
+    .trust-pill {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        font-size: 0.85rem;
+    }
+
+    /* Un-crowd the Hero buttons */
+    .hero-actions {
+        flex-direction: column;
+    }
+}
+
+/* --- Phase 1: Lead Trap CSS --- */
+
+/* 1. Header Fix (Aggressive) */
+@media (max-width: 900px) {
+
+    /* Hide text earlier to prevent overlap on tablets/large phones */
+    .brand-text {
+        display: none !important;
+    }
+
+    .brand-logo {
+        height: 45px;
+    }
+}
+
+/* 2. Sticky Mobile CTA Bar */
+.mobile-cta-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #0f0f0f;
+    border-top: 2px solid var(--gold);
+    display: none !important;
+    /* Hidden by default */
+    padding: 12px 15px;
+    z-index: 9999;
+    gap: 15px;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
+}
+
+.mobile-cta-btn {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+}
+
+.cta-call {
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+}
+
+.cta-quote {
+    background: var(--gold);
+    color: #000;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+}
+
+@media (max-width: 768px) {
+    .mobile-cta-bar {
+        display: flex !important;
+    }
+
+    /* Add padding to body so bar doesn't cover content */
+    body {
+        padding-bottom: 70px;
+    }
+
+    /* Chat Widget Adjustment */
+    .chat-widget {
+        bottom: 90px !important;
+    }
+}
+
+/* 3. Hero "Power Form" */
+.power-form-wrapper {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid var(--border-gold);
+    border-radius: var(--radius-lg);
+    padding: 25px;
+    max-width: 420px;
+    box-shadow: var(--shadow-card), 0 0 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    margin-top: 20px;
+}
+
+.power-form-header {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.power-form-header h3 {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+}
+
+.power-form-header p {
+    color: var(--gold);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pf-group {
+    margin-bottom: 15px;
+}
+
+.pf-input,
+.pf-select {
+    width: 100%;
+    padding: 14px;
+    background: #222;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.pf-input:focus,
+.pf-select:focus {
+    border-color: var(--gold);
+    outline: none;
+    background: #2a2a2a;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.pf-submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold-gradient);
+    border: none;
+    border-radius: 6px;
+    color: #000;
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: transform 0.2s ease;
+}
+
+.pf-submit:hover {
+    transform: scale(1.02);
+    filter: brightness(1.1);
+}
+
+.secure-note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* End Phase 1 */
+
+/* --- Phase 2: Trust & Authority --- */
+
+.veteran-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+.mini-trust-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    font-size: 0.8rem;
+    color: #aaa;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
+}
+
+.mini-trust-icons i {
+    margin-right: 4px;
+}
+
+/* Glassmorphism Reviews */
+.review-card {
+    background: rgba(26, 26, 26, 0.6) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.review-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--gold);
+}
+
+.review-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold) !important;
+}
+
+/* End Phase 2 */
+
+@media (max-width: 480px) {
+    .hero-actions .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Reduce Giant Hero Text */
+    .hero-content h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    /* Fix Service Area buttons touching */
+    .locations-grid {
+        gap: 15px !important;
+    }
+
+    /* process steps */
+    .steps-row {
+        gap: 40px;
+    }
+}
+
+/* --- Phase 4: "Brutal" Polish Animations --- */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Default: Content is ALWAYS visible (Fail-safe approach) */
+.animate-on-scroll {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Animation preparation - only when observer is actually ready */
+.animate-on-scroll.will-animate {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Animation triggered - element becomes visible */
+.animate-on-scroll.will-animate.is-visible,
+.animate-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delays for child elements (if needed) */
+.delay-100 {
+    transition-delay: 0.1s;
+}
+
+.delay-200 {
+    transition-delay: 0.2s;
+}
+
+.delay-300 {
+    transition-delay: 0.3s;
+}
+
+/* Enhanced Hover States for "Tactile" feel */
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.15);
+    border-color: var(--gold);
+}
+
+/* --- THE STORM PROTOCOL --- */
+.storm-banner {
+    background: linear-gradient(90deg, #1f2937, #111827);
+    color: #fff;
+    border-bottom: 2px solid #3b82f6;
+    /* Rain Blue */
+    padding: 12px 0;
+    position: relative;
+    z-index: 99;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.storm-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.storm-icon {
+    font-size: 1.5rem;
+    color: #60a5fa;
+    /* Light Blue */
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.storm-text {
+    font-size: 0.95rem;
+}
+
+.storm-cta {
+    color: #93c5fd;
+    margin-left: 5px;
+}
+
+.storm-btn {
+    background: #2563eb;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.storm-btn:hover {
+    background: #1d4ed8;
+}
+
+@media (max-width: 768px) {
+    .storm-content {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .storm-cta {
+        display: block;
+        margin: 0;
+    }
+}
