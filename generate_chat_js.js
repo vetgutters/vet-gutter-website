@@ -9,14 +9,17 @@ try {
     const manualContent = fs.readFileSync(manualPath, 'utf8');
     let template = fs.readFileSync(templatePath, 'utf8');
 
-    // Use JSON.stringify to safely escape everything
     const safeManualJSON = JSON.stringify(manualContent);
 
-    // UNIQUE PLACEHOLDER REPLACEMENT (Regex to handle potential formatting spaces)
-    const finalContent = template.replace(/\{\{\s*__INJECT_MANUAL_HERE__\s*\}\}/, safeManualJSON);
+    // Use a FUNCTION for replacement to avoid $ patterns being interpreted
+    // Use Regex to handle any whitespace around the placeholder
+    const finalContent = template.replace(
+        /\{\{\s*__INJECT_MANUAL_HERE__\s*\}\}/,
+        () => safeManualJSON
+    );
 
     fs.writeFileSync(outputPath, finalContent);
-    console.log('Successfully generated chat.js with JSON.stringify injection.');
+    console.log('Successfully generated chat.js with safe function replacement.');
 
 } catch (err) {
     console.error('Error generating chat.js:', err);
