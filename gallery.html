@@ -205,29 +205,26 @@
                 { src: 'assets/photos/real-project-6.jpg', title: '6-Inch Commercial' }
             ];
 
-            // 2. Render Static Projects IMMEDIATELY (Fail Safe)
-            // This ensures the page is never blank even if API fails
-            function renderStatic() {
-                let staticHtml = '';
-                staticProjects.forEach(p => {
-                    staticHtml += `
-                        <div class="gallery-item" onclick="openLightbox(this)">
-                            <img src="${p.src}" alt="${p.title}" loading="lazy" onerror="this.parentElement.style.display='none'">
-                            <div class="caption">${p.title}</div>
-                        </div>`;
-                });
-                // Append, don't overwrite if we do this logic weirdly
-                grid.innerHTML += staticHtml;
-                if (loader) loader.style.display = 'none';
-            }
+            // 2. Render Static Projects IMMEDIATELY
+            // This ensures instant content paints.
+            let html = '';
+            staticProjects.forEach(p => {
+                html += `
+                    <div class="gallery-item" onclick="openLightbox(this)">
+                        <img src="${p.src}" alt="${p.title}" loading="lazy" onerror="this.parentElement.style.display='none'">
+                        <div class="caption">${p.title}</div>
+                    </div>`;
+            });
+            grid.innerHTML = html;
 
-            renderStatic(); // SHOW CONTENT NOW
+            // HIDE LOADER NOW - We have content.
+            if (loader) loader.style.display = 'none';
 
-            // 3. Try fetching new projects (progressive enhancement)
+            // 3. Try fetching new projects (Progressive Enhancement)
             try {
-                // Short timeout to prevent hanging
+                // 3s Timeout
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
+                const timeoutId = setTimeout(() => controller.abort(), 3000);
 
                 const res = await fetch('/api/leads?type=projects', { signal: controller.signal });
                 clearTimeout(timeoutId);
@@ -246,7 +243,7 @@
                                     </div>
                                 </div>`;
                         });
-                        // Prepend dynamic projects to the top
+                        // Prepend new work to the top
                         grid.innerHTML = dynamicHtml + grid.innerHTML;
                     }
                 }
