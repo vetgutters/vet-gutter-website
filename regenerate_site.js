@@ -13,6 +13,8 @@ console.log("🦎 Axolotl Protocol Initiated: Regenerating Site...");
 try {
     console.log("   --> Regrowing Location Pages...");
     require('./generate-pages.js');
+    console.log("   --> Applying Geo-Coordinates & Fixes...");
+    require('./fix-locations.js');
 } catch (e) {
     console.error("   !!! Error regenerating pages:", e.message);
 }

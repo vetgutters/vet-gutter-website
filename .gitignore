@@ -3,3 +3,12 @@ node_modules/
 .DS_Store
 dist/
 .wrangler/
+
+# Bloat & Logs
+*.log
+*.txt
+*.pdf
+*.zip
+manual_*
+debug_log.txt
+deploy.log
