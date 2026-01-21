@@ -173,6 +173,13 @@ ul {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
 }
 
+/* Storm/High Demand Banner - below header */
+.storm-banner {
+    position: relative;
+    z-index: 500;
+    /* Lower than sticky-nav's 1000 */
+}
+
 /* Row 1: Navigation Links - Centered */
 .desktop-nav-row {
     display: none;
