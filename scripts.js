@@ -167,26 +167,33 @@ document.addEventListener('DOMContentLoaded', () => {
 checkWeather();
 
 
-// --- THE STORM PROTOCOL (Weather Logic) ---
+// --- THE CHAMELEON PROTOCOL (Weather Adaptation) ---
 async function checkWeather() {
   try {
     const res = await fetch('/api/weather');
     if (!res.ok) return;
     const weather = await res.json();
 
-    // If storming (or forced for demo), show banner
-    // Note: For demo, check strictly for isStorming boolean from API
+    // 1. Storm Banner Logic
     if (weather.isStorming) {
       const banner = document.getElementById('stormBanner');
       const msg = document.getElementById('stormMessage');
 
       if (banner && msg) {
-        msg.textContent = `${weather.condition} Detected.`;
+        msg.textContent = `Heavy Rain Detected near Ocala.`;
         banner.style.display = 'block';
+      }
+
+      // 2. Hero Adaptation (The Chameleon)
+      // If we are on the home page (hero-subtext exists), adapt the messaging.
+      const heroTitle = document.querySelector('.service-hero h1') || document.querySelector('h1');
+      if (heroTitle && heroTitle.innerText.includes('Protect Your')) {
+        // Subtle urgency shift
+        heroTitle.innerHTML = `Protect Your Home from <span style="color: var(--gold);">Heavy Rain</span>`;
       }
     }
   } catch (e) {
-    console.log("Weather check failed (stealth mode):", e);
+    // console.log("Weather check failed (stealth mode):", e);
   }
 }
 // --- ROUND 5: HIGH-VOLTAGE CRO LOGIC ⚡ ---
@@ -248,9 +255,9 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        // console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }, err => {
-        console.log('ServiceWorker registration failed: ', err);
+        // console.log('ServiceWorker registration failed: ', err);
       });
   });
 }

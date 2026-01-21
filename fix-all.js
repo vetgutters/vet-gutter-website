@@ -89,15 +89,15 @@ function processFile(filePath) {
 
 // Main
 const files = findHtmlFiles(rootDir);
-console.log(`Found ${files.length} HTML files\n`);
+// console.log(`Found ${files.length} HTML files\n`);
 
 let fixedCount = 0;
 files.forEach(file => {
     const relativePath = path.relative(rootDir, file);
     if (processFile(file)) {
-        console.log(`✓ Fixed: ${relativePath}`);
+        // console.log(`✓ Fixed: ${relativePath}`);
         fixedCount++;
     }
 });
 
-console.log(`\n✅ Fixed ${fixedCount} files`);
+// console.log(`\n✅ Fixed ${fixedCount} files`);

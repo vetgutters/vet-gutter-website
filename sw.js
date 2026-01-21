@@ -1,4 +1,4 @@
-const CACHE_NAME = 'veteran-gutters-v1';
+const CACHE_NAME = 'veteran-gutters-v2';
 const URLS_TO_CACHE = [
     '/',
     '/index.html',
@@ -14,9 +14,10 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then(cache => {
-                console.log('Opened cache');
+                // console.log('Opened cache');
                 return cache.addAll(URLS_TO_CACHE);
             })
+            .then(() => self.skipWaiting())
     );
 });
 

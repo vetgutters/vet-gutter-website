@@ -48,7 +48,7 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <!-- FontAwesome for Icons (using CDN for simplicity/completeness) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -130,70 +130,7 @@
     }]
     </script>
 </head>
-<meta property="og:description"
-    content="Veteran-owned seamless gutters and leaf protection. Serving Ocala, The Villages, and Marion County. Get a free estimate today.">
-<meta property="og:image" content="https://veterangutterguards.com/assets/photos/hero-new.jpg">
-<meta property="og:url" content="https://veterangutterguards.com/">
-<meta property="og:type" content="website">
 
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Veteran Gutters & Guards - Ocala, FL">
-<meta name="twitter:description"
-    content="Protect your home with veteran-precision gutters. Licensed & Insured in Central Florida.">
-<meta name="twitter:image" content="https://veterangutterguards.com/assets/photos/hero-new.jpg">
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap"
-    rel="stylesheet">
-
-<link rel="stylesheet" href="styles.css">
-<!-- FontAwesome for Icons (using CDN for simplicity/completeness) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Schema Markup -->
-<script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "LocalBusiness",
-      "name": "Veteran Gutters & Guards",
-      "image": "https://veterangutterguards.com/assets/photos/hero-new.jpg",
-      "telephone": "321-278-7996",
-      "url": "https://veterangutterguards.com",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Ocala",
-        "addressRegion": "FL",
-        "addressCountry": "US"
-      },
-      "geo": {
-        "@type": "GeoCoordinates",
-        "latitude": 29.1872,
-        "longitude": -82.1401
-      },
-      "priceRange": "$$",
-      "description": "Veteran-owned gutter installation, repair, and protection services in Ocala, The Villages, and surrounding areas. Licensed & Insured.",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday"
-        ],
-        "opens": "08:00",
-        "closes": "18:00"
-      },
-      "sameAs": [
-        "https://www.facebook.com/veteranguttersguards"
-      ]
-    }
-    </script>
-</head>
 
 <body>
     <!-- Accessibility Skip Link -->
@@ -212,13 +149,14 @@
             </a>
 
             <nav class="desktop-nav">
-                <a href="about.html">About</a>
+                <a href="/about.html">About</a>
                 <a href="#services">Services</a>
                 <a href="#reviews">Reviews</a>
-                <a href="club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
-                <a href="gallery.html">Gallery</a>
+                <a href="/club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
+                <a href="/gallery.html">Gallery</a>
                 <a href="#contact">Contact</a>
-                <a href="#contact" class="desktop-cta-btn">Get Free Quote <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#hero-form" class="desktop-cta-btn" id="desktop-cta-button">Get Free Quote <i
+                        class="fa-solid fa-arrow-right"></i></a>
             </nav>
 
             <div class="nav-right">
@@ -233,11 +171,11 @@
 
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
-            <a href="about.html">About</a>
+            <a href="/about.html">About</a>
             <a href="#services">Services</a>
             <a href="#reviews">Reviews</a>
-            <a href="club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
-            <a href="gallery.html">Gallery</a>
+            <a href="/club.html" style="color:var(--gold); font-weight:600;">Gutter Club™</a>
+            <a href="/gallery.html">Gallery</a>
             <a href="#contact">Contact</a>
         </div>
     </header>
@@ -444,7 +382,7 @@
                     </a>
 
                     <!-- 4th Grid Item -->
-                    <a href="gallery.html" class="service-card">
+                    <a href="/gallery.html" class="service-card">
                         <div class="card-img-wrapper">
                             <img src="assets/project-overview.jpg" alt="Our Work" loading="lazy">
                         </div>
@@ -660,7 +598,7 @@
         <div class="container cta-container">
             <h2>Ready for a clear, no-pressure estimate?</h2>
             <br>
-            <a href="tel:3212787996" class="btn btn-primary btn-large">Request a Free Estimate ></a>
+            <a href="#hero-form" class="btn btn-primary btn-large">Request a Free Estimate ></a>
         </div>
     </section>
 
@@ -745,9 +683,9 @@
             <p>&copy; 2026 Veteran Gutters & Guards. All Rights Reserved.</p>
             <p style="margin-top: 10px;">
                 Serving Marion, Sumter, and Lake Counties. |
-                <a href="sitemap.html" style="color: #555; text-decoration: none;">Site Map</a> |
-                <a href="privacy.html" style="color: #555; text-decoration: none;">Privacy</a> |
-                <a href="terms.html" style="color: #555; text-decoration: none;">Terms</a>
+                <a href="/sitemap.html" style="color: #555; text-decoration: none;">Site Map</a> |
+                <a href="/privacy.html" style="color: #555; text-decoration: none;">Privacy</a> |
+                <a href="/terms.html" style="color: #555; text-decoration: none;">Terms</a>
             </p>
             <p style="margin-top: 5px;">
                 123 Main St, Ocala, FL 34471 |

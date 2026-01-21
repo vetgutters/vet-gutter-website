@@ -23,7 +23,7 @@ export async function onRequest(context) {
 
     // 3. Check Protocol Status (Do we have ammo?)
     if (!ACCOUNT_SID || !AUTH_TOKEN || !FROM_PHONE) {
-        console.log("🐺 The Wolf is dormant. (Missing Twilio Keys)");
+        // console.log("🐺 The Wolf is dormant. (Missing Twilio Keys)");
         return new Response(JSON.stringify({ status: "skipped", message: "Wolf Dormant" }), {
             headers: { 'Content-Type': 'application/json' }
         });

@@ -4,7 +4,7 @@ const path = require('path');
 const DOMAIN = 'https://veterangutterguards.com';
 const TODAY = new Date().toISOString().split('T')[0];
 
-console.log("🚀 Starting Protocol: The Indexer");
+// console.log("🚀 Starting Protocol: The Indexer");
 
 // 1. Core Pages
 const corePages = [
@@ -48,11 +48,11 @@ if (fs.existsSync(locationsDir)) {
   </url>\n`;
         }
     });
-    console.log(`✅ Indexed ${files.length} Location Pages.`);
+    // console.log(`✅ Indexed ${files.length} Location Pages.`);
 }
 
 sitemap += `</urlset>`;
 
 // 3. Write Sitemap
 fs.writeFileSync('sitemap.xml', sitemap);
-console.log("🦅 sitemap.xml generated successfully.");
+// console.log("🦅 sitemap.xml generated successfully.");

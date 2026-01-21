@@ -123,7 +123,7 @@ function localizeReviews(content, locationName) {
 function processLocationPages() {
     const files = fs.readdirSync(locationsDir).filter(f => f.endsWith('.html'));
 
-    console.log(`Processing ${files.length} location pages...\n`);
+    // console.log(`Processing ${files.length} location pages...\n`);
 
     files.forEach(file => {
         const filePath = path.join(locationsDir, file);
@@ -146,10 +146,10 @@ function processLocationPages() {
 
         // Write back
         fs.writeFileSync(filePath, content, 'utf8');
-        console.log(`✓ Fixed: ${file}`);
+        // console.log(`✓ Fixed: ${file}`);
     });
 
-    console.log('\n✅ All location pages updated!');
+    // console.log('\n✅ All location pages updated!');
 }
 
 processLocationPages();

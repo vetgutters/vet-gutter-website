@@ -364,7 +364,7 @@ neighborhoods.forEach(neighborhood => {
     const fileName = `${neighborhood.slug}.html`;
     const filePath = path.join(locationsDir, fileName);
     fs.writeFileSync(filePath, pageContent);
-    console.log(`Generated: ${fileName}`);
+    // console.log(`Generated: ${fileName}`);
 });
 
-console.log('All location pages generated successfully.');
+// console.log('All location pages generated successfully.');

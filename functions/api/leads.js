@@ -106,7 +106,7 @@ export async function onRequest(context) {
 async function sendEmailNotification(env, lead) {
     const API_KEY = env.RESEND_API_KEY;
     if (!API_KEY) {
-        console.log("Email Notification Skipped: No RESEND_API_KEY in environment variables.");
+        // console.log("Email Notification Skipped: No RESEND_API_KEY in environment variables.");
         return "skipped_no_key";
     }
 

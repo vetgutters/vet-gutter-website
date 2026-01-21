@@ -17,11 +17,11 @@ async function testChat() {
     console.log(`POST to https://${options.hostname}${options.path}...`);
 
     const req = https.request(options, (res) => {
-        console.log(`Status: ${res.statusCode}`);
+        // console.log(`Status: ${res.statusCode}`);
         let data = '';
         res.on('data', (chunk) => { data += chunk; });
         res.on('end', () => {
-            console.log("Body:", data);
+            // console.log("Body:", data);
         });
     });
 

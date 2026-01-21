@@ -1357,23 +1357,38 @@ footer p {
 }
 
 @media (min-width: 992px) {
-    .desktop-cta-btn {
+
+    #desktop-cta-button {
         display: inline-flex;
         align-items: center;
         gap: 8px;
-        background: var(--gold-gradient);
-        color: #000;
+        background: var(--gold-gradient) !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        text-shadow: none !important;
         padding: 10px 24px;
         border-radius: 4px;
-        font-weight: 700;
+        font-weight: 800;
         text-decoration: none;
         margin-left: 20px;
         transition: transform 0.2s;
+        opacity: 1 !important;
+        /* Brutal verification */
+        filter: none !important;
+        /* Brutal verification */
     }
 
-    .desktop-cta-btn:hover {
+    #desktop-cta-button:hover,
+    #desktop-cta-button:focus,
+    #desktop-cta-button:active,
+    #desktop-cta-button:visited {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        background: var(--gold-gradient) !important;
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important;
+        text-shadow: none !important;
+        opacity: 1 !important;
     }
 }
 
@@ -1475,4 +1490,85 @@ select:focus,
 textarea:focus {
     outline: 2px solid var(--gold) !important;
     outline-offset: 2px;
+}
+
+/* --- CHAMELEON PROTOCOL STYLES --- */
+#stormBanner {
+    display: none;
+    /* Hidden by default */
+    background: linear-gradient(90deg, #d32f2f, #b71c1c);
+    /* Red Alert */
+    color: #fff;
+    text-align: center;
+    padding: 12px 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.5s ease-out;
+    z-index: 2000;
+    /* Above nav */
+    position: relative;
+}
+
+#stormBanner strong {
+    text-transform: uppercase;
+    margin-right: 8px;
+    color: #ffd700;
+    /* Gold alert */
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Storm Banner Details */
+.storm-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.storm-icon {
+    font-size: 1.2rem;
+    color: #ffd700;
+}
+
+.storm-text {
+    font-size: 0.95rem;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    /* Explicit font */
+}
+
+.storm-cta {
+    margin-left: 10px;
+    font-size: 0.85rem;
+    color: #ffd700;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.storm-btn {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.storm-btn:hover {
+    background: #fff;
+    color: #d32f2f;
 }

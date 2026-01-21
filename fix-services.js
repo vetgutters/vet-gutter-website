@@ -35,7 +35,7 @@ function addFavicon(content) {
 function processServicePages() {
     const files = fs.readdirSync(servicesDir).filter(f => f.endsWith('.html'));
 
-    console.log(`Processing ${files.length} service pages...\n`);
+    // console.log(`Processing ${files.length} service pages...\n`);
 
     files.forEach(file => {
         const filePath = path.join(servicesDir, file);
@@ -51,10 +51,10 @@ function processServicePages() {
 
         // Write back
         fs.writeFileSync(filePath, content, 'utf8');
-        console.log(`✓ Fixed: ${file}`);
+        // console.log(`✓ Fixed: ${file}`);
     });
 
-    console.log('\n✅ All service pages updated!');
+    // console.log('\n✅ All service pages updated!');
 }
 
 processServicePages();

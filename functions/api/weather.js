@@ -15,11 +15,16 @@ export async function onRequest(context) {
     };
 
     if (!API_KEY) {
-        // Mock mode for testing without key
-        // return new Response(JSON.stringify({ ...defaultState, isStorming: true, condition: "Thunderstorm" }), { 
-        //     headers: { 'Content-Type': 'application/json' } 
-        // });
-        return new Response(JSON.stringify(defaultState), {
+        // Mock mode for testing without key: Randomly simulate storm 20% of the time for "Aliveness" demo
+        // UNCOMMENT NEXT LINE TO TEST STORM MODE RANDOMLY
+        // const mockStorm = Math.random() > 0.8;
+        const mockStorm = false;
+
+        return new Response(JSON.stringify({
+            ...defaultState,
+            isStorming: mockStorm,
+            condition: mockStorm ? "Thunderstorm" : "Clear"
+        }), {
             headers: { 'Content-Type': 'application/json' }
         });
     }

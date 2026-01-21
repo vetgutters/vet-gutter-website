@@ -186,6 +186,6 @@ async function checkWeather() {
       }
     }
   } catch (e) {
-    console.log("Weather check failed (stealth mode):", e);
+    // console.log("Weather check failed (stealth mode):", e);
   }
 }

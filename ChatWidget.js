@@ -1,6 +1,6 @@
 class ChatWidget {
     constructor() {
-        console.log('VGG ChatWidget Initialized');
+        // console.log('VGG ChatWidget Initialized');
         this.isOpen = false;
         this.messages = [];
         this.init();
