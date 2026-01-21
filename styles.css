@@ -215,17 +215,20 @@ ul {
 
 .desktop-nav {
     display: none;
+    flex: 1;
+    justify-content: center;
+    gap: 10px;
 }
 
 .desktop-nav a {
-    margin: 0 15px;
+    margin: 0 8px;
     color: #b0b0b0;
     /* Light grey per screenshot */
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     position: relative;
     white-space: nowrap;
     transition: color 0.3s ease;
@@ -706,7 +709,7 @@ footer p {
 
 @media (min-width: 1024px) {
     .desktop-nav {
-        display: block;
+        display: flex;
     }
 
     .hamburger {
