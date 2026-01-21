@@ -1599,8 +1599,8 @@ textarea:focus {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     animation: slideDown 0.5s ease-out;
-    z-index: 2000;
-    /* Above nav */
+    z-index: 500;
+    /* BELOW nav (was 2000, now 500 to stay under sticky header z-index:1000) */
     position: relative;
 }
 
