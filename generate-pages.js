@@ -305,7 +305,7 @@ neighborhoods.forEach(neighborhood => {
     // The generated files are in /locations/, so we need to go up one level (../) for assets.
 
     // Fix CSS/JS
-    pageContent = pageContent.replace(/href="styles.css"/g, 'href="../styles.css"');
+    pageContent = pageContent.replace(/href="styles\.css(.*?)"/g, 'href="../styles.css$1"');
     pageContent = pageContent.replace(/src="scripts.js"/g, 'src="../scripts.js"');
     pageContent = pageContent.replace(/src="ChatWidget.js"/g, 'src="../ChatWidget.js"');
 
