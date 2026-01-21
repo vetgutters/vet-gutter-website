@@ -77,9 +77,10 @@ const replacements = [
 // Add favicon after stylesheet link if not present
 function addFavicon(content) {
     if (!content.includes('rel="icon"')) {
+        // Match stylesheet link with optional query string
         content = content.replace(
-            /<link rel="stylesheet" href="\.\.\/styles\.css">/,
-            '<link rel="stylesheet" href="../styles.css">\n    <link rel="icon" type="image/png" href="/assets/logo-shield.png">'
+            /<link rel="stylesheet" href="\.\.\/styles\.css(\?v=\d+)?">/,
+            '<link rel="stylesheet" href="../styles.css?v=3">\n    <link rel="icon" type="image/png" href="/assets/logo-shield.png">'
         );
     }
     return content;

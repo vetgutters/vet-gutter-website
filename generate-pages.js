@@ -8,6 +8,7 @@ const neighborhoods = [
     { name: "Village of Fenney", slug: "village-of-fenney", area: "The Villages" },
     { name: "Village of Marsh Bend", slug: "village-of-marsh-bend", area: "The Villages" },
     { name: "Village of Monarch Grove", slug: "village-of-monarch-grove", area: "The Villages" },
+    { name: "Village of Citrus Grove", slug: "village-of-citrus-grove", area: "The Villages" },
     { name: "Village of DeLuna", slug: "village-of-deluna", area: "The Villages" },
     { name: "Ocala", slug: "ocala" },
     // { name: "The Villages", slug: "the-villages" }, // REMOVED DUPLICATE
