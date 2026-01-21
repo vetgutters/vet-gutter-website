@@ -221,14 +221,14 @@ ul {
 }
 
 .desktop-nav a {
-    margin: 0 6px;
+    margin: 0 4px;
     color: #b0b0b0;
     /* Light grey per screenshot */
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.3px;
+    letter-spacing: 0;
     position: relative;
     white-space: nowrap;
     transition: color 0.3s ease;
@@ -272,11 +272,11 @@ ul {
     border: 1px solid var(--gold);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     border-radius: 8px;
     /* Slightly rounded */
-    padding: 10px 24px;
-    font-size: 1rem;
+    padding: 8px 16px;
+    font-size: 0.9rem;
     font-weight: 600;
     letter-spacing: 0.5px;
 }
