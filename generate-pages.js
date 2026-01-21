@@ -302,63 +302,60 @@ neighborhoods.forEach(neighborhood => {
         `<meta property="og:url" content="https://veterangutterguards.com/locations/${neighborhood.slug}.html">`
     );
 
-    // --- B. Relative Path Fixes ---
-    // The generated files are in /locations/, so we need to go up one level (../) for assets.
+    // --- B. Relative Path Fixes -> ROOT PATH FIXES (Robust) ---
+    // Instead of fighting with ../, we use root-relative paths (/) which work from anywhere.
 
-    // Fix CSS/JS
-    pageContent = pageContent.replace(/href="styles\.css(.*?)"/g, 'href="../styles.css$1"');
-    pageContent = pageContent.replace(/src="scripts.js"/g, 'src="../scripts.js"');
-    pageContent = pageContent.replace(/src="ChatWidget.js"/g, 'src="../ChatWidget.js"');
+    // Fix CSS/JS - Ensure they point to root
+    pageContent = pageContent.replace(/href="styles\.css(.*?)"/g, 'href="/styles.css$1"');
+    pageContent = pageContent.replace(/src="scripts.js"/g, 'src="/scripts.js"');
+    pageContent = pageContent.replace(/src="ChatWidget.js"/g, 'src="/ChatWidget.js"');
 
-    // Fix Images
-    pageContent = pageContent.replace(/src="assets\//g, 'src="../assets/');
+    // Fix Images - Use root /assets/
+    pageContent = pageContent.replace(/src="assets\//g, 'src="/assets/');
 
-    // Fix Internal Links
-    // 1. Links to main pages (index, about, gallery, etc) -> prepend ../
-    //    We need to be careful not to double-dot links that we might accidentally fix twice.
-    //    Best regex: match href="[word]" where word is NOT starting with http, #, or ..
-
+    // Fix Internal Links - Use Root Paths
     const mainPages = ['index.html', 'about.html', 'club.html', 'gallery.html', 'partners.html'];
     mainPages.forEach(page => {
         const regex = new RegExp(`href="${page}"`, 'g');
-        pageContent = pageContent.replace(regex, `href="../${page}"`);
+        pageContent = pageContent.replace(regex, `href="/${page}"`);
     });
 
-    // 2. Links to sections (e.g. #services) -> need to go to ../index.html#services
-    pageContent = pageContent.replace(/href="#services"/g, 'href="../index.html#services"');
-    pageContent = pageContent.replace(/href="#reviews"/g, 'href="../index.html#reviews"');
-    pageContent = pageContent.replace(/href="#contact"/g, 'href="../index.html#contact"');
+    // Fix Anchors - Point to Root (Home) for main nav, but handle local if needed?
+    // User requested "Secure My Spot" to work. It links to #contact.
+    // Making it /#contact sends it to Home. This is safe.
+    // If we want it to scroll on the page, we should leave it as #contact IF the page has that ID.
+    // BUT the nav is shared. 
+    // Let's us Root Links for robustness as requested "Check all pages".
+    pageContent = pageContent.replace(/href="#services"/g, 'href="/#services"');
+    pageContent = pageContent.replace(/href="#reviews"/g, 'href="/#reviews"');
+    pageContent = pageContent.replace(/href="#contact"/g, 'href="/#contact"');
 
-    // Exception: The "Check My Roof" or sticky CTA might link to #contact or #hero-form ON THE SAME PAGE.
-    // We want to KEEP in-page anchors for things like "Get Quote" button if the form is on the same page.
-    // The original code had <a href="#hero-form">. We should revert that change for specifically #hero-form if we want it to scroll.
-    // BUT, index.html links to #services in the NAV. That should go to index.html#services strictly? 
-    // Actually, usually "Services" is on the page... wait. 
-    // The generated page HAS a services section. So #services should probably stay local?
-    // User said "link to explaining services and gutter needs".
-    // Let's keep NAV links pointing to Home, but internal page links (like CTA) working?
-    // The Nav in index.html: <a href="#services">Services</a>.
-    // If I am on /locations/ocala.html, clicking "Services" should scroll down to the local services.
-    // So preserving href="#services" is correct.
+    // Fix Hero Form link to be local functionality or root?
+    // The "Get Free Quote" button links to #hero-form.
+    // Location pages HAVE #hero-form. So this link should NOT be changed to /#hero-form if we want local conversion.
+    // However, the above logic might catch it if we aren't careful.
+    // Let's explicitly fix #hero-form to be local OR root.
+    // If I change #hero-form to /#hero-form, it reloads to home. Bad for conversion on location page.
+    // So let's NOT replace #hero-form. The above lines don't target it.
+    // BUT, check if index.html uses #hero-form in the NAV?
+    // Index nav has: <a href="#hero-form" ...>Get Free Quote</a>.
+    // If we leave it as #hero-form, it works on location page (scrolls to form). PERFECT.
+    // So we assume any #link NOT replaced above stays local.
 
-    // BUT, what about `href="admin/index.html"`? -> `href="../admin/index.html"`
-    pageContent = pageContent.replace(/href="admin\//g, 'href="../admin/');
+    // Fix Admin Link
+    pageContent = pageContent.replace(/href="admin\//g, 'href="/admin/');
 
     // Link to main logo anchor
-    pageContent = pageContent.replace('href="#" class="brand"', 'href="../index.html" class="brand"');
+    pageContent = pageContent.replace('href="#" class="brand"', 'href="/" class="brand"');
 
-    // 3. Links to Service Detail Pages (services/seamless-gutters.html)
-    // These are in /services/, so from /locations/ they are ../services/
-    pageContent = pageContent.replace(/href="services\//g, 'href="../services/');
+    // Fix Service Detail Links
+    pageContent = pageContent.replace(/href="services\//g, 'href="/services/');
 
-    // 4. Links to Locations (in the footer/area list)
-    // In index.html, they are href="locations/ocala.html".
-    // From /locations/ocala.html, linking to "locations/dunnellon.html" (relative) would be /locations/locations/dunnellon.html -> WRONG.
-    // It should be just "dunnellon.html" OR "../locations/dunnellon.html".
-    // Since they are siblings in the same folder, "dunnellon.html" is correct.
-    // So we replace "locations/" with "" for these links?
-    // OR we replace "locations/" with "./"
-    pageContent = pageContent.replace(/href="locations\//g, 'href="');
+    // Fix Location Links (Footer)
+    // In index.html: href="locations/ocala.html"
+    // We want: href="/locations/ocala.html"
+    // So replace "locations/" with "/locations/"
+    pageContent = pageContent.replace(/href="locations\//g, 'href="/locations/');
 
 
     // --- C. Write File ---
