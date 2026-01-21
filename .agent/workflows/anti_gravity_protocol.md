@@ -80,3 +80,23 @@ This version assumes **multiple autonomous agents** (planner, coder, tester, rev
 * **No agent may assume defaults “common in practice”.**
 * **Any uncertainty → escalation to Coordinator.**
 * **Execution is gated on user confirmation of all UNSPECIFIED items.**
+
+## 🛑 6. Tactical Pre-Flight Checks (The Trap Breaker)
+*Before writing a single line of code fix:*
+
+1.  **Git Status Check**:
+    *   `git status` - Are we clean?
+    *   `git log -1` - What is the last commit?
+    *   **TRAP**: Assuming code is pushed just because it is saved.
+
+2.  **Deployment Verification**:
+    *   Is the *live* URL showing the commit we expect?
+    *   **TRAP**: Debugging code that hasn't arrived yet.
+
+3.  **Environment Integrity**:
+    *   `wrangler.toml` / `.env` - Are we targeting `production` or `staging`?
+    *   **TRAP**: Pushing to the wrong project.
+
+4.  **Cache Elimination**:
+    *   If a visual change is missing, attempt cache-busting (e.g. `?v=X`) *before* rewriting CSS.
+    *   **TRAP**: Over-engineering a fix for a cached file.
